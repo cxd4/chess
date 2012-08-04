@@ -1,1 +1,43 @@
-I don't give a shit what goes here.
+Binary Encoding of Positions
+--------------------------------------------------------------------------------
+The current chess position of the game is stored as a 64-byte memory buffer.
+The buffer is a two dimensional array:  of eight arrays of eight-byte pairs.
+
+char game[8][8] = {
+    0x02, 0x04, 0x23, 0x01, 0x00, 0x03, 0x24, 0x02, /* rank 1 */
+    0x05, 0x05, 0x05, 0x05, 0x05, 0x05, 0x05, 0x05, /* rank 2 */
+    0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, /* rank 3 */
+    0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, /* rank 4 */
+    0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, /* rank 5 */
+    0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, /* rank 6 */
+    0x15, 0x15, 0x15, 0x15, 0x15, 0x15, 0x15, 0x15, /* rank 7 */
+    0x12, 0x14, 0x33, 0x11, 0x10, 0x13, 0x34, 0x12  /* rank 8 */ };
+
+The initial value of the buffer, for the classical chess start position.
+
+Each byte in the default table given above conforms to custom specifications.
+
+The low-order nybble has these values defined:
+    Bin. Hex.  Signal
+    ---- ---- --------
+    0000 0x00 King
+    0001 0x01 Queen
+    0010 0x02 Rook
+    0011 0x03 Bishop
+    0100 0x04 Knight
+    0101 0x05 Pawn
+    0110 0x06 unused
+    0111 0x07 unused
+    1000 0x08 ..
+    1110 0x0E reserved
+    1111 0x0F free
+
+The high-order nybble has these values defined:
+    Bin. Hex. Property
+    ---- ---- --------------------------------------------------
+    0000 0x00 normal
+    0001 0x10 This piece is Black.
+    0010 0x20 Valid castling destination square.
+    0100 0x40 Valid `en passant` execute.
+    1000 0x80 reserved for future vendor use (draw rules, maybe)
+    1111 0xF0 undefined
