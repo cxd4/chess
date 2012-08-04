@@ -1,3 +1,59 @@
+Forsyth-Edwards Notation
+--------------------------------------------------------------------------------
+In the nineteenth century, David Forsyth designed a standard for recording any
+chess position.  Forsyth's method for recording the initial chess position:
+    rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR
+        '1', '2', '3', '4', '5', '6', '7', '8':  spaces between pieces
+        'K', 'Q', 'R', 'B', 'N', 'P':  placement of White pieces
+        'k', 'q', 'r', 'b', 'n', 'p':  placement of Black pieces
+        '/':  divider between ranks of the chessboard
+
+It was not until the development of computer chess software that Steven Edwards
+extended this standard to include five "data fields" after Forsyth's original:
+    rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1
+    - active color:  must be either 'w' (White) or 'b' (Black)
+    - castling availability:  '-' for no castling, 'KQkq' for all castling
+    - en passant target square:  '-' for none, [square] for en passant capture
+    - halfmove clock:  nonnegative integer, since pawn advance or capture
+    - fullmove clock:  positive integer, current move number for the game
+
+The official FEN specifications are available as part of Steven Edward's widely-
+published PGN specifications and make all of the strict definitions to which
+this application is dedicated in compliance.
+
+Please input FEN records no longer than ninety-two ASCII character octets.
+
+Maximally sized data field for piece placement data:  72 characters --
+"1k1q1r1r/b11b1n1n/1p1p1p1p/1p1p1p1p/1P1P1P1P/1P1P1P1P/B11B1N1N/1K1Q1R1R "
+
+Maximally sized data field for active color:  2 characters --
+"w " or "b " (no other values acceptable)
+
+Maximally sized data field for castling availability:  5 characters --
+"KQkq "
+
+Maximally sized data field for en passant target square:  3 characters --
+"a3 ", "a6 ", "b3 ", "b6 ", "c3 ", "c6 ", "d3 ", "d6 ", "e3 ", "e6 ", ... "h6 "
+
+Maximally sized data field for halfmove clock:  3 characters --
+"50 " (or any other ten-digit number)
+
+Maximally sized data field for fullmove clock:  theoretical
+"100\0", "1000\0", "10000\0", ?
+
+72 + 2 + 5 + 3 + 3 + 5 = 90
+
+Entering a valid FEN record longer than ninety-two characters (as unlikely as
+one's existence is) will result in truncation down to ninety-two characters and
+its consequential invalidity.  The FEN record is allocated into a ninety-six-
+byte buffer, but the last four bytes are reserved for ending the string buffer.
+
+Since the user-specified string for the FEN record is read from left-to-right,
+any data after an array of characters that is interpreted as a valid FEN record
+may precede any junk bytes trailing off at the end for whatever reason.  The
+user-specified string will always be truncated down to ninety-two characters
+and appended with string safety information to become ninety-six bytes wide.
+
 Binary Encoding of Positions
 --------------------------------------------------------------------------------
 The current chess position of the game is stored as a 64-byte memory buffer.
