@@ -19,15 +19,16 @@ unsigned load_FEN(char FEN[96]);
 int main(void)
 {
     char board[128] = { /* ASCII chess board testing */
-        "r n b q k b n r\n"
-        "p p p p p p p p\n"
         ". . . . . . . .\n"
         ". . . . . . . .\n"
         ". . . . . . . .\n"
         ". . . . . . . .\n"
-        "P P P P P P P P\n"
-        "R N B Q K B N R" };
+        ". . k . . . . .\n"
+        ". . . . . . . .\n"
+        "K . . . . . . .\n"
+        ". . . q . . . ." };
     printf(board);
+    printf("Black to win in two moves.\n\n");
     return 0;
 }
 
@@ -35,7 +36,7 @@ unsigned load_FEN(char FEN[96])
 {
     register int i = 0; /* array indexing loop variable */
     register int file = 000; /* file A, second dimension of the game[] array */
-    register int rank = 000; /* rank 1, first dimension of game array access */
+    register int rank = 111; /* rank 8, first dimension of game array access */
     register unsigned RET_SLOT; /* 16-bit integer with game property flags */
                                 /* flag whether it's Black's turn, castling,
                                 /* etc., just not implemented here yet .. */
@@ -71,22 +72,19 @@ unsigned load_FEN(char FEN[96])
             }
             file = file + square_offset;
         }
+        else if (char_reg == '/') /* divider between chessboard ranks */
+        {
+            --rank;
+            if (rank == 0xFFFF) /* imaginary rank after integer underflow */
+            {
+                return (ERROR);
+            }
+        }
         else
         {
-            if (char_reg == '/') /* divider between chessboard ranks */
-            {
-                ++rank;
-                if (rank == 8) /* the ninth rank, given zero base */
-                {
-                    return (ERROR);
-                }
-            }
-            else
-            {
-                /* It must be a piece letter.  When I finish this, the ASCII  *
-                 * code point will be translated into which piece code to     *
-                 * write at the registered game[] chessboard index to load.   */
-            }
+            /* It must be a piece letter.  When I finish this, the ASCII  *
+             * code point will be translated into which piece code to     *
+             * write at the registered game[] chessboard index to load.   */
         }
         ++i;
     } while (i == i);
