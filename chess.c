@@ -1,4 +1,5 @@
 #define ERROR   0xFFFF
+#define ERRORDW 0xFFFFFFFF
 #define WHITE   0
 #define BLACK   1
 #include<stdio.h>
@@ -82,28 +83,28 @@ unsigned load_FEN(char FEN[96])
         else
         {
             switch (char_reg & 0x00DF) /* case conversion to uppercase */
-			{ /* I should convert this to a lookup table some time. */
+            { /* I should convert this to a lookup table some time. */
                 case 'B':
                     game[file][rank] = (char_reg & 0x0020) ? 0x13 : 0x03;
                     break;
-				case 'K':
+                case 'K':
                     game[file][rank] = (char_reg & 0x0020) ? 0x10 : 0x00;
                     break;
-				case 'N':
+                case 'N':
                     game[file][rank] = (char_reg & 0x0020) ? 0x14 : 0x04;
                     break;
-				case 'P':
+                case 'P':
                     game[file][rank] = (char_reg & 0x0020) ? 0x15 : 0x05;
                     break;
-				case 'Q':
+                case 'Q':
                     game[file][rank] = (char_reg & 0x0020) ? 0x11 : 0x01;
                     break;
-				case 'R':
+                case 'R':
                     game[file][rank] = (char_reg & 0x0020) ? 0x12 : 0x02;
                     break;
                 default:
                     return (ERROR);
-			} /* inefficient and unoptimized */
+            } /* inefficient and unoptimized */
         } /* I should use an array lookup method to replace a linear switch. */
     } while (i == i);
     /* to-do:  mask RET_SLOT with en passant, castling, 50 move draw info... */
