@@ -52,12 +52,11 @@ unsigned load_FEN(char FEN[96])
     FEN[95] = '\0'; /* standard, necessary to prevent indefinite recursion */
     do
     {
-        register int char_reg = FEN[i];
+        register int char_reg = FEN[i++];
         if (char_reg == ' ')
         {
-            ++i; /* Skip the space character before advance. */
             break;
-        } /* in MIPS:  BEQ FEN[i], 32, next_block; instead of BNE using do...while */
+        }
 
         if ((char_reg & 0x0030) == '0')
         {
@@ -82,12 +81,31 @@ unsigned load_FEN(char FEN[96])
         }
         else
         {
-            /* It must be a piece letter.  When I finish this, the ASCII  *
-             * code point will be translated into which piece code to     *
-             * write at the registered game[] chessboard index to load.   */
-        }
-        ++i;
+            switch (char_reg & 0x00DF) /* case conversion to uppercase */
+			{ /* I should convert this to a lookup table some time. */
+                case 'B':
+                    game[file][rank] = (char_reg & 0x0020) ? 0x13 : 0x03;
+                    break;
+				case 'K':
+                    game[file][rank] = (char_reg & 0x0020) ? 0x10 : 0x00;
+                    break;
+				case 'N':
+                    game[file][rank] = (char_reg & 0x0020) ? 0x14 : 0x04;
+                    break;
+				case 'P':
+                    game[file][rank] = (char_reg & 0x0020) ? 0x15 : 0x05;
+                    break;
+				case 'Q':
+                    game[file][rank] = (char_reg & 0x0020) ? 0x11 : 0x01;
+                    break;
+				case 'R':
+                    game[file][rank] = (char_reg & 0x0020) ? 0x12 : 0x02;
+                    break;
+                default:
+                    return (ERROR);
+			} /* inefficient and unoptimized */
+        } /* I should use an array lookup method to replace a linear switch. */
     } while (i == i);
-    /* I need to decide how to define the RET_SLOT to send to parent block. */
+    /* to-do:  mask RET_SLOT with en passant, castling, 50 move draw info... */
     return (RET_SLOT);
 }
