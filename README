@@ -1,7 +1,7 @@
 Binary Encoding of Positions
 --------------------------------------------------------------------------------
 The current chess position of the game is stored as a 64-byte memory buffer.
-The buffer is a two dimensional array:  of eight arrays of eight-byte pairs.
+The buffer is a two-dimensional array:  of eight arrays of eight-byte pairs.
 
 char game[8][8] = {
     0x02, 0x04, 0x23, 0x01, 0x00, 0x03, 0x24, 0x02, /* rank 1 */
