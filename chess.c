@@ -38,39 +38,64 @@ unsigned load_FEN(char FEN[96])
     register int i = 0; /* array indexing loop variable */
     register int file = 000; /* file A, second dimension of the game[] array */
     register int rank = 111; /* rank 8, first dimension of game array access */
-    register unsigned RET_SLOT; /* 16-bit integer with game property flags */
-                                /* flag whether it's Black's turn, castling,
-                                /* etc., just not implemented here yet .. */
-
-    if (FEN[0] < '-') /* in FEN, ASCII code points before this invalid */
-    {
-        return (ERROR);
-    } /* Check just first character to split from the following loop. */
+    register unsigned RET_SLOT;
 
     FEN[92] =  ' '; /* to prevent the next loop from looping indefinitely */
     FEN[93] = '\r'; /* Windows new line format:  CRLF */
     FEN[94] = '\n'; /* '\r' is the carriage return; '\n' is the line feed. */
     FEN[95] = '\0'; /* standard, necessary to prevent indefinite recursion */
+
+    /* field 1:  piece placement data */
     do
     {
         register int char_reg = FEN[i++];
         if (char_reg == ' ')
         {
-            break;
+            if (rank == 000)
+            { /* all eight rows of chessboard defined */
+                break;
+            }
+            return (ERROR); /* incomplete position */
         }
 
         if ((char_reg & 0x0030) == '0')
         {
             register unsigned square_offset = char_reg & 0x000F;
-            if (square_offset > 8) /* char_reg not between '0' and '8' */
+            if (square_offset == 0)
             {
+                return (ERROR); /* not an acceptable value */
+            }
+            if (square_offset > 8)
+            {  
                 return (ERROR);
             }
-            if (file + square_offset > 7) /* outside the chessboard boundary */
-            { /* (`file` is the existing offset onto current row of squares.) */
-                return (ERROR);
+
+            if (square_offset == 8)
+            {
+                if (file == 000)
+                {
+                    if (rank == 000)
+                    {
+                        return (ERROR);
+                    }
+                    --rank;
+                }
+                else
+                {
+                    return (ERROR);
+                }
             }
-            file = file + square_offset;
+            else
+            {
+                file = file + square_offset;
+                if (file >> 3 == 0x0000) /* faster than:  if (int < 8) */
+                {
+                }
+                else
+                {
+                    return (ERROR);
+                }
+            }
         }
         else if (char_reg == '/') /* divider between chessboard ranks */
         {
@@ -107,6 +132,23 @@ unsigned load_FEN(char FEN[96])
             } /* inefficient and unoptimized */
         } /* I should use an array lookup method to replace a linear switch. */
     } while (i == i);
+
+    /* field 2:  active color */
+    switch (FEN[i])
+    {
+        case 'b':
+            RET_SLOT = 0x0001;
+        case 'w':
+            break;
+        default:
+            return (ERROR);
+    }
+    ++i;
+    if (FEN[i] != ' ')
+    {
+        return (ERROR);
+    }
+    ++i;
     /* to-do:  mask RET_SLOT with en passant, castling, 50 move draw info... */
     return (RET_SLOT);
 }
