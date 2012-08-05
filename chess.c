@@ -152,19 +152,19 @@ unsigned load_FEN(char FEN[96])
 
     /* field 3:  castling */
     if (FEN[i] == '-')
-	{
+    {
         ++i;
         if (FEN[i] == ' ')
-		{
+        {
             ++i;
-		}
-		else
-		{
+        }
+        else
+        {
             return (ERROR);
-		}
-	}
-	while (i == i)
-	{
+        }
+    }
+    while (i == i)
+    {
         register int char_reg;
         char_reg = FEN[i++];
         switch (char_reg)
@@ -186,9 +186,9 @@ unsigned load_FEN(char FEN[96])
         }
         char_reg = FEN[i++];
         if (char_reg == ' ')
-		{
+        {
             break;
-		}
+        }
         switch (char_reg)
         {
             case 'Q':
@@ -205,9 +205,9 @@ unsigned load_FEN(char FEN[96])
         }
         char_reg = FEN[i++];
         if (char_reg == ' ')
-		{
+        {
             break;
-		}
+        }
         switch (char_reg)
         {
             case 'k':
@@ -221,18 +221,18 @@ unsigned load_FEN(char FEN[96])
         }
         char_reg = FEN[i++];
         if (char_reg == ' ')
-		{
+        {
             break;
-		}
-		else if (char_reg == 'q')
-		{
+        }
+        else if (char_reg == 'q')
+        {
             game[0][2] |= 0x20;
-		}
-		else
-		{
+        }
+        else
+        {
             return (ERROR);
-		}
-	}
+        }
+    }
     ++i;
     /* to-do:  mask RET_SLOT with en passant, 50 move draw info... */
     return (RET_SLOT);
