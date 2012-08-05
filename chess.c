@@ -46,7 +46,7 @@ unsigned load_FEN(char FEN[96])
     FEN[94] = '\n'; /* '\r' is the carriage return; '\n' is the line feed. */
     FEN[95] = '\0'; /* standard, necessary to prevent indefinite recursion */
 
-    /* field 1:  piece placement data */
+    /* field 1:  piece placement */
     do
     {
         char_reg = FEN[i++];
@@ -154,11 +154,19 @@ unsigned load_FEN(char FEN[96])
         return (ERROR);
     }
 
-    /* field 3:  castling */
+    /* field 3:  castling availability */
     switch (char_reg = FEN[i])
     {
         case '-':
-            break;
+            ++i;
+            if (FEN[i] == ' ')
+			{
+                break;
+			}
+			else
+			{
+                return (ERROR);
+			}
         case 'K':
             game[7][6] |= 0x20;
             switch (char_reg = FEN[++i])
@@ -184,7 +192,7 @@ unsigned load_FEN(char FEN[96])
                                         break;
                                     }
                                 default:
-                                    return(ERROR);
+                                    return (ERROR);
                             }
                         case 'q':
                             game[0][2] |= 0x20;
@@ -209,7 +217,7 @@ unsigned load_FEN(char FEN[96])
                                 break;
                             }
                         default:
-                            return(ERROR);
+                            return (ERROR);
                     }
                 case 'q':
                     game[0][2] |= 0x20;
@@ -240,7 +248,7 @@ unsigned load_FEN(char FEN[96])
                                 break;
                             }
                         default:
-                            return(ERROR);
+                            return (ERROR);
                     }
                 case 'q':
                     game[0][2] |= 0x20;
@@ -265,7 +273,7 @@ unsigned load_FEN(char FEN[96])
                         break;
                     }
                 default:
-                    return(ERROR);
+                    return (ERROR);
             }
             break;
         case 'q':
@@ -275,9 +283,36 @@ unsigned load_FEN(char FEN[96])
                 break;
             }
         default:
-            return(ERROR);
+            return (ERROR);
     }
     ++i;
-    /* to-do:  mask RET_SLOT with en passant, 50 move draw info... */
+
+    /* field 4:  en passant target square */
+    if (FEN[i] & 0x60 == 0x60) /* valid ASCII symbol from '`' to 'o' */
+    {
+        file = FEN[i] & 0x0F;
+        if (file == 0) /* imaginary file, to the left of file A */
+        {
+            return (ERROR);
+        }
+        --file; /* 0 through 7 instead of 1 through 8 for files 'a' to 'h' */
+        if (file > 7)
+        {
+            return (ERROR);
+        }
+    }
+    switch (FEN[++i])
+    {
+        case '3':
+            rank = 5; /* from Black's view of the board */
+            break;
+        case '6':
+            rank = 2; /* from Black's view of the board */
+            break;
+        default:
+            return (ERROR);
+    }
+    game[file][rank] |= 0x40; /* en passant destination flag */
+
     return (RET_SLOT);
 }
