@@ -160,13 +160,13 @@ unsigned load_FEN(char FEN[96])
         case '-':
             ++i;
             if (FEN[i] == ' ')
-			{
+            {
                 break;
-			}
-			else
-			{
+            }
+            else
+            {
                 return (ERROR);
-			}
+            }
         case 'K':
             game[7][6] |= 0x20;
             switch (char_reg = FEN[++i])
@@ -288,7 +288,7 @@ unsigned load_FEN(char FEN[96])
     ++i;
 
     /* field 4:  en passant target square */
-    if (FEN[i] & 0x60 == 0x60) /* valid ASCII symbol from '`' to 'o' */
+    if ((FEN[i] & 0xF0) == 0x60) /* valid ASCII symbol from '`' to 'o' */
     {
         file = FEN[i] & 0x0F;
         if (file == 0) /* imaginary file, to the left of file A */
@@ -302,7 +302,7 @@ unsigned load_FEN(char FEN[96])
         }
     }
     switch (FEN[++i])
-    {
+    { /* I know there is an easy way to optimize this into a look-up table. */
         case '3':
             rank = 5; /* from Black's view of the board */
             break;
@@ -311,8 +311,58 @@ unsigned load_FEN(char FEN[96])
             break;
         default:
             return (ERROR);
-    }
+    } /* ... very soon, sleep first =D */
     game[file][rank] |= 0x40; /* en passant destination flag */
+    if (FEN[++i] == ' ')
+    {
+        ++i;
+    }
+    else
+    {
+        return (ERROR);
+    }
 
+    /* field 5:  halfmove clock */
+    if ((FEN[++i] & 0xF0) == 0x30)
+    {
+        int ply = FEN[i] & 0x0F;
+        if (ply > 9)
+        {
+            return (ERROR);
+        }
+
+        if (FEN[++i] == ' ')
+        {
+            RET_SLOT |= ply << 2; /* 6 bits is enough to store 50 dec. */
+            ++i;
+        }
+        else if ((FEN[i] & 0xF0) == 0x30)
+        {
+            char_reg = FEN[i] & 0x0F;
+            if (char_reg > 9)
+            {
+                return (ERROR);
+            }
+            else
+            {
+                ply = ply * 10;
+                ply = ply + char_reg; /* cannot assume:  ply |= char_reg */
+                if (ply > 50)
+                { /* illegal position:  Fifty Move Draw Rule */
+                    return (ERROR);
+                }
+
+                if (FEN[++i] == ' ')
+                {
+                    RET_SLOT |= ply << 2;
+                    ++i;
+                }
+                else
+                { /* A third digit means it's greater than 50. */
+                    return (ERROR);
+                }
+            }
+        }
+    }
     return (RET_SLOT);
 }
