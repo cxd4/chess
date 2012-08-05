@@ -38,6 +38,7 @@ unsigned load_FEN(char FEN[96])
     register int i = 0; /* array indexing loop variable */
     register int file = 000; /* file A, second dimension of the game[] array */
     register int rank = 111; /* rank 8, first dimension of game array access */
+    register int char_reg; /* optimization to use register access instead */
     register unsigned RET_SLOT;
 
     FEN[92] =  ' '; /* to prevent the next loop from looping indefinitely */
@@ -48,7 +49,7 @@ unsigned load_FEN(char FEN[96])
     /* field 1:  piece placement data */
     do
     {
-        register int char_reg = FEN[i++];
+        char_reg = FEN[i++];
         if (char_reg == ' ')
         {
             if (rank == 000)
@@ -144,94 +145,137 @@ unsigned load_FEN(char FEN[96])
             return (ERROR);
     }
     ++i;
-    if (FEN[i] != ' ')
+    if (FEN[i] == ' ')
+    {
+        ++i;
+    }
+    else
     {
         return (ERROR);
     }
-    ++i;
 
     /* field 3:  castling */
-    if (FEN[i] == '-')
+    switch (char_reg = FEN[i])
     {
-        ++i;
-        if (FEN[i] == ' ')
-        {
-            ++i;
-        }
-        else
-        {
-            return (ERROR);
-        }
-    }
-    while (i == i)
-    {
-        register int char_reg;
-        char_reg = FEN[i++];
-        switch (char_reg)
-        {
-            case 'K':
-                game[7][6] |= 0x20;
-                break;
-            case 'Q':
-                game[7][2] |= 0x20;
-                break;
-            case 'k':
-                game[0][6] |= 0x20;
-                break;
-            case 'q':
-                game[0][2] |= 0x20;
-                break;
-            default:
-                return (ERROR);
-        }
-        char_reg = FEN[i++];
-        if (char_reg == ' ')
-        {
+        case '-':
             break;
-        }
-        switch (char_reg)
-        {
-            case 'Q':
-                game[7][2] |= 0x20;
-                break;
-            case 'k':
-                game[0][6] |= 0x20;
-                break;
-            case 'q':
-                game[0][2] |= 0x20;
-                break;
-            default:
-                return (ERROR);
-        }
-        char_reg = FEN[i++];
-        if (char_reg == ' ')
-        {
+        case 'K':
+            game[7][6] |= 0x20;
+            switch (char_reg = FEN[++i])
+            {
+                case ' ':
+                    break;
+                case 'Q':
+                    game[7][2] |= 0x20;
+                    switch (char_reg = FEN[++i])
+                    {
+                        case ' ':
+                            break;
+                        case 'k':
+                            game[0][6] |= 0x20;
+                            switch (char_reg = FEN[++i])
+                            {
+                                case ' ':
+                                    break;
+                                case 'q':
+                                    game[0][2] |= 0x20;
+                                    if (FEN[++i] == ' ')
+                                    {
+                                        break;
+                                    }
+                                default:
+                                    return(ERROR);
+                            }
+                        case 'q':
+                            game[0][2] |= 0x20;
+                            if (FEN[++i] == ' ')
+                            {
+                                break;
+                            }
+                        default:
+                            return (ERROR);
+                    }
+                    break;
+                case 'k':
+                    game[0][6] |= 0x20;
+                    switch (char_reg = FEN[++i])
+                    {
+                        case ' ':
+                            break;
+                        case 'q':
+                            game[0][2] |= 0x20;
+                            if (FEN[++i] == ' ')
+                            {
+                                break;
+                            }
+                        default:
+                            return(ERROR);
+                    }
+                case 'q':
+                    game[0][2] |= 0x20;
+                    if (FEN[++i] == ' ')
+                    {
+                        break;
+                    }
+                default:
+                    return (ERROR);
+            }
             break;
-        }
-        switch (char_reg)
-        {
-            case 'k':
-                game[0][6] |= 0x20;
-                break;
-            case 'q':
-                game[0][2] |= 0x20;
-                break;
-            default:
-                return (ERROR);
-        }
-        char_reg = FEN[i++];
-        if (char_reg == ' ')
-        {
+        case 'Q':
+            game[7][2] |= 0x20;
+            switch (char_reg = FEN[++i])
+            {
+                case ' ':
+                    break;
+                case 'k':
+                    game[0][6] |= 0x20;
+                    switch (char_reg = FEN[++i])
+                    {
+                        case ' ':
+                            break;
+                        case 'q':
+                            game[0][2] |= 0x20;
+                            if (FEN[++i] == ' ')
+                            {
+                                break;
+                            }
+                        default:
+                            return(ERROR);
+                    }
+                case 'q':
+                    game[0][2] |= 0x20;
+                    if (FEN[++i] == ' ')
+                    {
+                        break;
+                    }
+                default:
+                    return (ERROR);
+            }
             break;
-        }
-        else if (char_reg == 'q')
-        {
+        case 'k':
+            game[0][6] |= 0x20;
+            switch (char_reg = FEN[++i])
+            {
+                case ' ':
+                    break;
+                case 'q':
+                    game[0][2] |= 0x20;
+                    if (FEN[++i] == ' ')
+                    {
+                        break;
+                    }
+                default:
+                    return(ERROR);
+            }
+            break;
+        case 'q':
             game[0][2] |= 0x20;
-        }
-        else
-        {
-            return (ERROR);
-        }
+            if (FEN[++i] == ' ')
+            {
+                break;
+            }
+        default:
+            return(ERROR);
     }
     ++i;
     /* to-do:  mask RET_SLOT with en passant, 50 move draw info... */
