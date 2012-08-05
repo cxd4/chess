@@ -29,7 +29,7 @@ int main(void)
         "K . . . . . . .\n"
         ". . . q . . . ." };
     printf(board);
-    printf("Black to win in two moves.\n\n");
+    printf("\n\nBlack to win in two moves.\n\n");
     return 0;
 }
 
@@ -149,6 +149,91 @@ unsigned load_FEN(char FEN[96])
         return (ERROR);
     }
     ++i;
-    /* to-do:  mask RET_SLOT with en passant, castling, 50 move draw info... */
+
+    /* field 3:  castling */
+    if (FEN[i] == '-')
+	{
+        ++i;
+        if (FEN[i] == ' ')
+		{
+            ++i;
+		}
+		else
+		{
+            return (ERROR);
+		}
+	}
+	while (i == i)
+	{
+        register int char_reg;
+        char_reg = FEN[i++];
+        switch (char_reg)
+        {
+            case 'K':
+                game[7][6] |= 0x20;
+                break;
+            case 'Q':
+                game[7][2] |= 0x20;
+                break;
+            case 'k':
+                game[0][6] |= 0x20;
+                break;
+            case 'q':
+                game[0][2] |= 0x20;
+                break;
+            default:
+                return (ERROR);
+        }
+        char_reg = FEN[i++];
+        if (char_reg == ' ')
+		{
+            break;
+		}
+        switch (char_reg)
+        {
+            case 'Q':
+                game[7][2] |= 0x20;
+                break;
+            case 'k':
+                game[0][6] |= 0x20;
+                break;
+            case 'q':
+                game[0][2] |= 0x20;
+                break;
+            default:
+                return (ERROR);
+        }
+        char_reg = FEN[i++];
+        if (char_reg == ' ')
+		{
+            break;
+		}
+        switch (char_reg)
+        {
+            case 'k':
+                game[0][6] |= 0x20;
+                break;
+            case 'q':
+                game[0][2] |= 0x20;
+                break;
+            default:
+                return (ERROR);
+        }
+        char_reg = FEN[i++];
+        if (char_reg == ' ')
+		{
+            break;
+		}
+		else if (char_reg == 'q')
+		{
+            game[0][2] |= 0x20;
+		}
+		else
+		{
+            return (ERROR);
+		}
+	}
+    ++i;
+    /* to-do:  mask RET_SLOT with en passant, 50 move draw info... */
     return (RET_SLOT);
 }
