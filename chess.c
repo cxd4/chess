@@ -41,6 +41,10 @@ unsigned load_FEN(char FEN[96])
     register int rank = 111; /* rank 8, first dimension of game array access */
     register int char_reg; /* optimization to use register access instead */
 
+    int ep_file[16] = {-1,0,1,2,3,4,5,6,7,-1,-1,-1,-1,-1,-1,-1};
+    int ep_rank[16] = {-1,-1,-1,5,-1,-1,2,-1,-1,-1,-1,-1,-1,-1,-1,-1};
+    /* array look-up tables to instantaneously assign conditional integers */
+
     FEN[92] =  ' '; /* to prevent the next loop from looping indefinitely */
     FEN[93] = '\r'; /* Windows new line format:  CRLF */
     FEN[94] = '\n'; /* '\r' is the carriage return; '\n' is the line feed. */
@@ -282,34 +286,23 @@ unsigned load_FEN(char FEN[96])
         default:
             return (ERROR);
     }
-    ++i;
 
     /* field 4:  en passant target square */
-    if ((FEN[i] & 0xF0) == 0x60) /* valid ASCII symbol from '`' to 'o' */
+    char_reg = FEN[++i] ^ 0x60; /* potential lowercase ASCII letter */
+    file = ep_file[char_reg];
+    if (file == -1)
     {
-        file = FEN[i] & 0x0F;
-        if (file == 0) /* imaginary file, to the left of file A */
-        {
-            return (ERROR);
-        }
-        --file; /* 0 through 7 instead of 1 through 8 for files 'a' to 'h' */
-        if (file > 7)
-        {
-            return (ERROR);
-        }
+        return (ERROR);
     }
-    switch (FEN[++i])
-    { /* I know there is an easy way to optimize this into a look-up table. */
-        case '3':
-            rank = 5; /* from Black's view of the board */
-            break;
-        case '6':
-            rank = 2; /* from Black's view of the board */
-            break;
-        default:
-            return (ERROR);
-    } /* ... very soon, sleep first =D */
+    char_reg = FEN[++i] ^ 0x30; /* valid ASCII decimal digit */
+    rank = ep_rank[char_reg];
+    if (rank == -1)
+    {
+        return (ERROR);
+    }
     game[file][rank] |= 0x40; /* en passant destination flag */
+
+    /* field 5:  halfmove clock */
     if (FEN[++i] == ' ')
     {
         ++i;
@@ -319,7 +312,6 @@ unsigned load_FEN(char FEN[96])
         return (ERROR);
     }
 
-    /* field 5:  halfmove clock */
     if ((FEN[++i] & 0xF0) == 0x30)
     {
         register int ply = FEN[i] & 0x0F;
@@ -364,34 +356,34 @@ unsigned load_FEN(char FEN[96])
 
     /* field 6:  fullmove clock */
     if (FEN[i] == '0')
-	{
+    {
         return (ERROR);
-	}
-	else
-	{
+    }
+    else
+    {
         int move = 0;
         do
-	    {
+        {
             move = move * 10;
             char_reg = FEN[i];
             if ((char_reg & 0xF0) == 0x30)
-			{
+            {
                 char_reg = char_reg & 0x0F;
                 if (char_reg > 9)
-				{
+                {
                     return (ERROR);
-				}
+                }
                 move = move + char_reg;
                 if (FEN[++i] == ' ')
-				{
+                {
                     break;
-				}
-			}
-			else
-			{
+                }
+            }
+            else
+            {
                 return (ERROR);
-			}
-	    } while (i == i);
+            }
+        } while (i == i);
         return (move);
-	}
+    }
 }
