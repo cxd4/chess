@@ -37,8 +37,8 @@ int main(void)
 unsigned load_FEN(char FEN[96])
 {
     register int i = 0; /* array indexing loop variable */
-    register int file = 000; /* file A, second dimension of the game[] array */
-    register int rank = 111; /* rank 8, first dimension of game array access */
+    register int file = 0; /* file A, second dimension of the game[] array */
+    register int rank = 7; /* rank 8, first dimension of game array access */
     register int char_reg; /* optimization to use register access instead */
 
     char pieces[64] = {
@@ -59,70 +59,55 @@ unsigned load_FEN(char FEN[96])
     do
     {
         char_reg = FEN[i++];
-        if (char_reg == ' ')
-        {
-            if (rank == 000)
-            { /* all eight rows of chessboard defined */
-                break;
-            }
-            return (ERROR); /* incomplete position */
-        }
-
-        if ((char_reg & 0x0030) == '0')
-        {
-            register unsigned square_offset = char_reg & 0x000F;
+        if ((char_reg & 0xFFF0) == '0')
+        { /* number of squares before next piece or end of rank */
+            register int square_offset = char_reg & 0x000F;
             if (square_offset == 0)
             {
                 return (ERROR); /* not an acceptable value */
             }
-            if (square_offset > 8)
-            {  
-                return (ERROR);
-            }
 
-            if (square_offset == 8)
-            {
-                if (file == 000)
-                {
-                    if (rank == 000)
-                    {
-                        return (ERROR);
-                    }
-                    --rank;
-                }
-                else
-                {
-                    return (ERROR);
-                }
-            }
+            file = file + square_offset;
+            if ((file & 0xFFF8) == 0x0000) /* faster than if (int < 8) */
+            { /* Meh...BNE should be, like, illegal; why define a negative? */
+            } /* This presumes the positive is more likely, so branch out. */
             else
-            {
-                file = file + square_offset;
-                if (file >> 3 == 0x0000) /* faster than:  if (int < 8) */
-                {
-                }
-                else
-                {
-                    return (ERROR);
-                }
-            }
-        }
-        else if (char_reg == '/') /* divider between chessboard ranks */
-        {
-            --rank;
-            if (rank == 0xFFFF) /* imaginary rank after integer underflow */
             {
                 return (ERROR);
             }
         }
         else
-        {
+        { /* letter identifying a piece to assign */
             char_reg = pieces[char_reg ^ 0x40];
             if (char_reg == -1)
             {
                 return (ERROR);
             }
-            game[file][rank] = (char) char_reg;
+            game[file++][rank] = (char) char_reg;
+        }
+
+        if (file == 8)
+        { /* end of the rank */
+            if (rank == 0)
+            { /* all sixty-four squares of chess board defined */
+                if (FEN[i] == ' ')
+                { /* required separator between the FEN record data fields */
+                    break; /* done with this otherwise infinite loop */
+                }
+                else
+                {
+                    return (ERROR);
+                }
+            } /* else if is useless here, as this is unreachable if rank == 0 */
+            if (FEN[i] == '/') /* divider between chessboard ranks */
+            {
+                file = file ^ file; /* MOV (file, 0) */
+                --rank;
+            }
+            else
+            {
+                return (ERROR);
+            }
         }
     } while (i == i);
 
