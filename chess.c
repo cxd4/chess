@@ -14,7 +14,7 @@ char game[8][8] =
 int game_flags[4]; /* active color, halfmove clock, fullmove clock, draw data */
 
 int load_FEN(char FEN[96]);
-int main(void)
+int main(int argc, char *argv[])
 {
     char board[128] = { /* ASCII chess board testing */
         ". . . . . . . .\n"
@@ -27,6 +27,7 @@ int main(void)
         ". . . q . . . ." };
     printf(board);
     printf("\n\nBlack to win in two moves.\n\n");
+    printf("load_FEN(argv[1]) == %i\n", load_FEN(argv[1]));
     return 0;
 }
 
@@ -38,10 +39,10 @@ int load_FEN(char FEN[96])
     register int char_reg; /* optimization to use register access instead */
 
     char pieces[64] = {
-        -1, -1, 03, -1, -1, -1, -1, -1, -1, -1, -1, 00, -1, -1, 04, -1,
-        05, 01, 02, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
-        -1, -1, 23, -1, -1, -1, -1, -1, -1, -1, -1, 20, -1, -1, 24, -1,
-        25, 21, 22, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 };
+        -1, -1,003, -1, -1, -1, -1, -1, -1, -1, -1,000, -1, -1,004, -1,
+       005,001,002, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+        -1, -1,023, -1, -1, -1, -1, -1, -1, -1, -1,020, -1, -1,024, -1,
+       025,021,022, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 };
     int ep_file[16] = {-1,0,1,2,3,4,5,6,7,-1,-1,-1,-1,-1,-1,-1};
     int ep_rank[16] = {-1,-1,-1,5,-1,-1,2,-1,-1,-1,-1,-1,-1,-1,-1,-1};
     /* array look-up tables to instantaneously assign conditional integers */
@@ -64,12 +65,9 @@ int load_FEN(char FEN[96])
             }
 
             file = file + square_offset;
-            if ((file & 0xFFF8) == 0x0000) /* faster than if (int < 8) */
-            { /* Meh...BNE should be, like, illegal; why define a negative? */
-            } /* This presumes the positive is more likely, so branch out. */
-            else
+            if (file > 8)
             {
-                return -1;
+                return -2;
             }
         }
         else
@@ -77,9 +75,9 @@ int load_FEN(char FEN[96])
             char_reg = pieces[char_reg ^ 0x40];
             if (char_reg == -1)
             {
-                return -1;
+                return -3;
             }
-            game[file++][rank] = (char) char_reg;
+            game[file++][rank] = (char) char_reg;;
         }
 
         if (file == 8)
@@ -92,193 +90,149 @@ int load_FEN(char FEN[96])
                 }
                 else
                 {
-                    return -1;
+                    return -4;
                 }
             } /* else if is useless here, as this is unreachable if rank == 0 */
             if (FEN[i] == '/') /* divider between chessboard ranks */
             {
+                ++i;
                 file = file ^ file; /* MOV (file, 0) */
                 --rank;
             }
             else
             {
-                return -1;
+                return -5;
             }
         }
     } while (i == i); /* Fuck BNE. */
 
     /* field 2:  active color */
-    switch (FEN[i])
+    switch (FEN[++i])
     {
         case 'b':  game_flags[0] = 1; /* Black's turn to move */
         case 'w':  break;
-        default:  return -1;
-    }
-    ++i;
-    if (FEN[i] == ' ')
-    {
-        ++i;
-    }
-    else
-    {
-        return -1;
+        default:  return -6;
     }
 
     /* field 3:  castling availability */
-    switch (char_reg = FEN[i])
+    if (FEN[++i] == ' ') {}
+    else
+    {
+        return -7;
+    }
+    switch (FEN[++i])
     {
         case '-':
-            ++i;
-            if (FEN[i] == ' ')
-            {
-                break;
-            }
-            else
-            {
-                return -1;
-            }
+            if (FEN[++i] == ' ') break;
+            return -8;
         case 'K':
             game[7][6] |= 0x20;
-            switch (char_reg = FEN[++i])
+            switch (FEN[++i])
             {
-                case ' ':
-                    break;
+                case ' ':  break;
                 case 'Q':
                     game[7][2] |= 0x20;
-                    switch (char_reg = FEN[++i])
+                    switch (FEN[++i])
                     {
-                        case ' ':
-                            break;
+                        case ' ':  break;
                         case 'k':
                             game[0][6] |= 0x20;
-                            switch (char_reg = FEN[++i])
+                            switch (FEN[++i])
                             {
-                                case ' ':
-                                    break;
+                                case ' ':  break;
                                 case 'q':
                                     game[0][2] |= 0x20;
-                                    if (FEN[++i] == ' ')
-                                    {
-                                        break;
-                                    }
-                                default:
-                                    return -1;
+                                    if (FEN[++i] == ' ') break;
+                                default:  return -9;
                             }
+                            break;
                         case 'q':
                             game[0][2] |= 0x20;
-                            if (FEN[++i] == ' ')
-                            {
-                                break;
-                            }
-                        default:
-                            return -1;
+                            if (FEN[++i] == ' ') break;
+                        default:  return -10;
                     }
                     break;
                 case 'k':
                     game[0][6] |= 0x20;
-                    switch (char_reg = FEN[++i])
+                    switch (FEN[++i])
                     {
-                        case ' ':
-                            break;
+                        case ' ':  break;
                         case 'q':
                             game[0][2] |= 0x20;
-                            if (FEN[++i] == ' ')
-                            {
-                                break;
-                            }
-                        default:
-                            return -1;
+                            if (FEN[++i] == ' ') break;
+                        default:  return -11;
                     }
+                    break;
                 case 'q':
                     game[0][2] |= 0x20;
-                    if (FEN[++i] == ' ')
-                    {
-                        break;
-                    }
-                default:
-                    return -1;
+                    if (FEN[++i] == ' ') break;
+                default:  return -12;
             }
             break;
         case 'Q':
             game[7][2] |= 0x20;
-            switch (char_reg = FEN[++i])
+            switch (FEN[++i])
             {
-                case ' ':
-                    break;
+                case ' ':  break;
                 case 'k':
                     game[0][6] |= 0x20;
-                    switch (char_reg = FEN[++i])
+                    switch (FEN[++i])
                     {
-                        case ' ':
-                            break;
+                        case ' ':  break;
                         case 'q':
                             game[0][2] |= 0x20;
-                            if (FEN[++i] == ' ')
-                            {
-                                break;
-                            }
-                        default:
-                            return -1;
+                            if (FEN[++i] == ' ') break;
+                        default:  return -13;
                     }
+                    break;
                 case 'q':
                     game[0][2] |= 0x20;
-                    if (FEN[++i] == ' ')
-                    {
-                        break;
-                    }
-                default:
-                    return -1;
+                    if (FEN[++i] == ' ') break;
+                default:  return -14;
             }
             break;
         case 'k':
             game[0][6] |= 0x20;
-            switch (char_reg = FEN[++i])
+            switch (FEN[++i])
             {
-                case ' ':
-                    break;
+                case ' ':  break;
                 case 'q':
                     game[0][2] |= 0x20;
-                    if (FEN[++i] == ' ')
-                    {
-                        break;
-                    }
-                default:
-                    return -1;
+                    if (FEN[++i] == ' ') break;
+                default:  return -15;
             }
             break;
         case 'q':
             game[0][2] |= 0x20;
-            if (FEN[++i] == ' ')
-            {
-                break;
-            }
+            if (FEN[++i] == ' ') break;
         default:
-            return -1;
+            return -16;
     }
 
     /* field 4:  en passant target square */
-    char_reg = FEN[++i] ^ 0x60; /* potential lowercase ASCII letter */
-    file = ep_file[char_reg];
-    if (file == -1)
-    {
-        return -1;
-    }
-    char_reg = FEN[++i] ^ 0x30; /* valid ASCII decimal digit */
-    rank = ep_rank[char_reg];
-    if (rank == -1)
-    {
-        return -1;
-    }
-    game[file][rank] |= 0x40; /* en passant destination flag */
-
-    /* field 5:  halfmove clock */
-    if (FEN[++i] == ' ')
-    {
-        ++i;
-    }
+    if (FEN[++i] == '-') {}
     else
     {
-        return -1;
+        char_reg = FEN[++i] ^ 0x60; /* potential lowercase ASCII letter */
+        file = ep_file[char_reg];
+        if (file == -1)
+        {
+            return -17;
+        }
+        char_reg = FEN[++i] ^ 0x30; /* valid ASCII decimal digit */
+        rank = ep_rank[char_reg];
+        if (rank == -1)
+        {
+            return -18;
+        }
+        game[file][rank] |= 0x40; /* en passant destination flag */
+    }
+
+    /* field 5:  halfmove clock */
+    if (FEN[++i] == ' ') {}
+    else
+    {
+        return -19;
     }
 
     if ((FEN[++i] & 0xF0) == 0x30)
@@ -286,20 +240,19 @@ int load_FEN(char FEN[96])
         register int ply = FEN[i] & 0x0F;
         if (ply > 9)
         {
-            return -1;
+            return -20;
         }
 
         if (FEN[++i] == ' ')
         {
             game_flags[2] = ply;
-            ++i;
         }
         else if ((FEN[i] & 0xF0) == 0x30)
         {
             char_reg = FEN[i] & 0x0F;
             if (char_reg > 9)
             {
-                return -1;
+                return -21;
             }
             else
             {
@@ -307,52 +260,46 @@ int load_FEN(char FEN[96])
                 ply = ply + char_reg; /* cannot assume:  ply |= char_reg */
                 if (ply > 50)
                 { /* illegal position:  Fifty Move Draw Rule */
-                    return -1;
+                    return -22;
                 }
 
                 if (FEN[++i] == ' ')
                 {
                     game_flags[1] = ply;
-                    ++i;
                 }
                 else
                 { /* A third digit means it's greater than 50. */
-                    return -1;
+                    return -23;
                 }
             }
         }
     }
 
     /* field 6:  fullmove clock */
-    if (FEN[i] == '0')
+    char_reg = 0;
+    do
     {
-        return -1;
-    }
-    else
-    {
-        int move = 0;
-        do
+        if (FEN[++i] == '\0')
         {
-            move = move * 10;
-            char_reg = FEN[i];
-            if ((char_reg & 0xF0) == 0x30)
+            if (char_reg == 0)
             {
-                char_reg = char_reg & 0x0F;
-                if (char_reg > 9)
-                {
-                    return -1;
-                }
-                move = move + char_reg;
-                if (FEN[++i] == ' ')
-                {
-                    break;
-                }
+                return -24;
             }
-            else
+            return (char_reg);
+        }
+        char_reg = char_reg * 10;
+        if ((FEN[i] & 0xF0) == '0')
+        {
+            FEN[i] = FEN[i] & 0x0F;
+            if (FEN[i] > 9)
             {
-                return -1;
+                return -25;
             }
-        } while (i == i);
-        return (move);
-    }
+            char_reg = char_reg + FEN[i];
+        }
+        else
+        {
+            return -26;
+        }
+    } while (i == i);
 }
