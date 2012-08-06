@@ -122,7 +122,7 @@ unsigned load_FEN(char FEN[96])
             {
                 return (ERROR);
             }
-            game[file][rank] = pieces[char_reg];
+            game[file][rank] = (char) char_reg;
         }
     } while (i == i);
 
