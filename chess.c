@@ -1,8 +1,4 @@
-#define ERROR   0xFFFF
-#define ERRORDW 0xFFFFFFFF
-#define WHITE   0
-#define BLACK   1
-#include<stdio.h>
+#include <stdio.h>
 
 char game[8][8] =
 { /* QR    QN    QB     Q     K    KB    KN    KR */
@@ -17,7 +13,7 @@ char game[8][8] =
 };
 int game_flags[4]; /* active color, halfmove clock, fullmove clock, draw data */
 
-unsigned load_FEN(char FEN[96]);
+int load_FEN(char FEN[96]);
 int main(void)
 {
     char board[128] = { /* ASCII chess board testing */
@@ -34,7 +30,7 @@ int main(void)
     return 0;
 }
 
-unsigned load_FEN(char FEN[96])
+int load_FEN(char FEN[96])
 {
     register int i = 0; /* array indexing loop variable */
     register int file = 0; /* file A, second dimension of the game[] array */
@@ -64,7 +60,7 @@ unsigned load_FEN(char FEN[96])
             register int square_offset = char_reg & 0x000F;
             if (square_offset == 0)
             {
-                return (ERROR); /* not an acceptable value */
+                return -1; /* not an acceptable value */
             }
 
             file = file + square_offset;
@@ -73,7 +69,7 @@ unsigned load_FEN(char FEN[96])
             } /* This presumes the positive is more likely, so branch out. */
             else
             {
-                return (ERROR);
+                return -1;
             }
         }
         else
@@ -81,7 +77,7 @@ unsigned load_FEN(char FEN[96])
             char_reg = pieces[char_reg ^ 0x40];
             if (char_reg == -1)
             {
-                return (ERROR);
+                return -1;
             }
             game[file++][rank] = (char) char_reg;
         }
@@ -96,7 +92,7 @@ unsigned load_FEN(char FEN[96])
                 }
                 else
                 {
-                    return (ERROR);
+                    return -1;
                 }
             } /* else if is useless here, as this is unreachable if rank == 0 */
             if (FEN[i] == '/') /* divider between chessboard ranks */
@@ -106,17 +102,17 @@ unsigned load_FEN(char FEN[96])
             }
             else
             {
-                return (ERROR);
+                return -1;
             }
         }
-    } while (i == i);
+    } while (i == i); /* Fuck BNE. */
 
     /* field 2:  active color */
     switch (FEN[i])
     {
         case 'b':  game_flags[0] = 1; /* Black's turn to move */
         case 'w':  break;
-        default:  return (ERROR);
+        default:  return -1;
     }
     ++i;
     if (FEN[i] == ' ')
@@ -125,7 +121,7 @@ unsigned load_FEN(char FEN[96])
     }
     else
     {
-        return (ERROR);
+        return -1;
     }
 
     /* field 3:  castling availability */
@@ -139,7 +135,7 @@ unsigned load_FEN(char FEN[96])
             }
             else
             {
-                return (ERROR);
+                return -1;
             }
         case 'K':
             game[7][6] |= 0x20;
@@ -166,7 +162,7 @@ unsigned load_FEN(char FEN[96])
                                         break;
                                     }
                                 default:
-                                    return (ERROR);
+                                    return -1;
                             }
                         case 'q':
                             game[0][2] |= 0x20;
@@ -175,7 +171,7 @@ unsigned load_FEN(char FEN[96])
                                 break;
                             }
                         default:
-                            return (ERROR);
+                            return -1;
                     }
                     break;
                 case 'k':
@@ -191,7 +187,7 @@ unsigned load_FEN(char FEN[96])
                                 break;
                             }
                         default:
-                            return (ERROR);
+                            return -1;
                     }
                 case 'q':
                     game[0][2] |= 0x20;
@@ -200,7 +196,7 @@ unsigned load_FEN(char FEN[96])
                         break;
                     }
                 default:
-                    return (ERROR);
+                    return -1;
             }
             break;
         case 'Q':
@@ -222,7 +218,7 @@ unsigned load_FEN(char FEN[96])
                                 break;
                             }
                         default:
-                            return (ERROR);
+                            return -1;
                     }
                 case 'q':
                     game[0][2] |= 0x20;
@@ -231,7 +227,7 @@ unsigned load_FEN(char FEN[96])
                         break;
                     }
                 default:
-                    return (ERROR);
+                    return -1;
             }
             break;
         case 'k':
@@ -247,7 +243,7 @@ unsigned load_FEN(char FEN[96])
                         break;
                     }
                 default:
-                    return (ERROR);
+                    return -1;
             }
             break;
         case 'q':
@@ -257,7 +253,7 @@ unsigned load_FEN(char FEN[96])
                 break;
             }
         default:
-            return (ERROR);
+            return -1;
     }
 
     /* field 4:  en passant target square */
@@ -265,13 +261,13 @@ unsigned load_FEN(char FEN[96])
     file = ep_file[char_reg];
     if (file == -1)
     {
-        return (ERROR);
+        return -1;
     }
     char_reg = FEN[++i] ^ 0x30; /* valid ASCII decimal digit */
     rank = ep_rank[char_reg];
     if (rank == -1)
     {
-        return (ERROR);
+        return -1;
     }
     game[file][rank] |= 0x40; /* en passant destination flag */
 
@@ -282,7 +278,7 @@ unsigned load_FEN(char FEN[96])
     }
     else
     {
-        return (ERROR);
+        return -1;
     }
 
     if ((FEN[++i] & 0xF0) == 0x30)
@@ -290,7 +286,7 @@ unsigned load_FEN(char FEN[96])
         register int ply = FEN[i] & 0x0F;
         if (ply > 9)
         {
-            return (ERROR);
+            return -1;
         }
 
         if (FEN[++i] == ' ')
@@ -303,7 +299,7 @@ unsigned load_FEN(char FEN[96])
             char_reg = FEN[i] & 0x0F;
             if (char_reg > 9)
             {
-                return (ERROR);
+                return -1;
             }
             else
             {
@@ -311,7 +307,7 @@ unsigned load_FEN(char FEN[96])
                 ply = ply + char_reg; /* cannot assume:  ply |= char_reg */
                 if (ply > 50)
                 { /* illegal position:  Fifty Move Draw Rule */
-                    return (ERROR);
+                    return -1;
                 }
 
                 if (FEN[++i] == ' ')
@@ -321,7 +317,7 @@ unsigned load_FEN(char FEN[96])
                 }
                 else
                 { /* A third digit means it's greater than 50. */
-                    return (ERROR);
+                    return -1;
                 }
             }
         }
@@ -330,7 +326,7 @@ unsigned load_FEN(char FEN[96])
     /* field 6:  fullmove clock */
     if (FEN[i] == '0')
     {
-        return (ERROR);
+        return -1;
     }
     else
     {
@@ -344,7 +340,7 @@ unsigned load_FEN(char FEN[96])
                 char_reg = char_reg & 0x0F;
                 if (char_reg > 9)
                 {
-                    return (ERROR);
+                    return -1;
                 }
                 move = move + char_reg;
                 if (FEN[++i] == ' ')
@@ -354,7 +350,7 @@ unsigned load_FEN(char FEN[96])
             }
             else
             {
-                return (ERROR);
+                return -1;
             }
         } while (i == i);
         return (move);
