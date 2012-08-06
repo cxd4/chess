@@ -325,7 +325,7 @@ unsigned load_FEN(char FEN[96])
     /* field 5:  halfmove clock */
     if ((FEN[++i] & 0xF0) == 0x30)
     {
-        int ply = FEN[i] & 0x0F;
+        register int ply = FEN[i] & 0x0F;
         if (ply > 9)
         {
             return (ERROR);
@@ -364,5 +364,38 @@ unsigned load_FEN(char FEN[96])
             }
         }
     }
+
+    /* field 6:  fullmove clock */
+    if (FEN[i] == '0')
+	{
+        return (ERROR);
+	}
+	else
+	{
+        int move = 0;
+        do
+	    {
+            move = move * 10;
+            char_reg = FEN[i];
+            if ((char_reg & 0xF0) == 0x30)
+			{
+                char_reg = char_reg & 0x0F;
+                if (char_reg > 9)
+				{
+                    return (ERROR);
+				}
+                move = move + char_reg;
+                if (FEN[++i] == ' ')
+				{
+                    break;
+				}
+			}
+			else
+			{
+                return (ERROR);
+			}
+	    } while (i == i);
+        return (move);
+	}
     return (RET_SLOT);
 }
