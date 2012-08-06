@@ -41,6 +41,11 @@ unsigned load_FEN(char FEN[96])
     register int rank = 111; /* rank 8, first dimension of game array access */
     register int char_reg; /* optimization to use register access instead */
 
+    char pieces[64] = {
+        -1, -1, 03, -1, -1, -1, -1, -1, -1, -1, -1, 00, -1, -1, 04, -1,
+        05, 01, 02, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+        -1, -1, 23, -1, -1, -1, -1, -1, -1, -1, -1, 20, -1, -1, 24, -1,
+        25, 21, 22, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 };
     int ep_file[16] = {-1,0,1,2,3,4,5,6,7,-1,-1,-1,-1,-1,-1,-1};
     int ep_rank[16] = {-1,-1,-1,5,-1,-1,2,-1,-1,-1,-1,-1,-1,-1,-1,-1};
     /* array look-up tables to instantaneously assign conditional integers */
@@ -112,30 +117,13 @@ unsigned load_FEN(char FEN[96])
         }
         else
         {
-            switch (char_reg & 0x00DF) /* case conversion to uppercase */
-            { /* I should convert this to a lookup table some time. */
-                case 'B':
-                    game[file][rank] = (char_reg & 0x0020) ? 0x13 : 0x03;
-                    break;
-                case 'K':
-                    game[file][rank] = (char_reg & 0x0020) ? 0x10 : 0x00;
-                    break;
-                case 'N':
-                    game[file][rank] = (char_reg & 0x0020) ? 0x14 : 0x04;
-                    break;
-                case 'P':
-                    game[file][rank] = (char_reg & 0x0020) ? 0x15 : 0x05;
-                    break;
-                case 'Q':
-                    game[file][rank] = (char_reg & 0x0020) ? 0x11 : 0x01;
-                    break;
-                case 'R':
-                    game[file][rank] = (char_reg & 0x0020) ? 0x12 : 0x02;
-                    break;
-                default:
-                    return (ERROR);
-            } /* inefficient and unoptimized */
-        } /* I should use an array lookup method to replace a linear switch. */
+            char_reg = pieces[char_reg ^ 0x40];
+            if (char_reg == -1)
+            {
+                return (ERROR);
+            }
+            game[file][rank] = pieces[char_reg];
+        }
     } while (i == i);
 
     /* field 2:  active color */
