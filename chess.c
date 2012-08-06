@@ -15,6 +15,7 @@ char game[8][8] =
     0x15, 0x15, 0x15, 0x15, 0x15, 0x15, 0x15, 0x15, /* rank 7 */
     0x12, 0x14, 0x33, 0x11, 0x10, 0x13, 0x34, 0x12  /* rank 8 */
 };
+int game_flags[4]; /* active color, halfmove clock, fullmove clock, draw data */
 
 unsigned load_FEN(char FEN[96]);
 int main(void)
@@ -39,7 +40,6 @@ unsigned load_FEN(char FEN[96])
     register int file = 000; /* file A, second dimension of the game[] array */
     register int rank = 111; /* rank 8, first dimension of game array access */
     register int char_reg; /* optimization to use register access instead */
-    register unsigned RET_SLOT;
 
     FEN[92] =  ' '; /* to prevent the next loop from looping indefinitely */
     FEN[93] = '\r'; /* Windows new line format:  CRLF */
@@ -137,12 +137,9 @@ unsigned load_FEN(char FEN[96])
     /* field 2:  active color */
     switch (FEN[i])
     {
-        case 'b':
-            RET_SLOT = 0x0001;
-        case 'w':
-            break;
-        default:
-            return (ERROR);
+        case 'b':  game_flags[0] = 1; /* Black's turn to move */
+        case 'w':  break;
+        default:  return (ERROR);
     }
     ++i;
     if (FEN[i] == ' ')
@@ -333,7 +330,7 @@ unsigned load_FEN(char FEN[96])
 
         if (FEN[++i] == ' ')
         {
-            RET_SLOT |= ply << 2; /* 6 bits is enough to store 50 dec. */
+            game_flags[2] = ply;
             ++i;
         }
         else if ((FEN[i] & 0xF0) == 0x30)
@@ -354,7 +351,7 @@ unsigned load_FEN(char FEN[96])
 
                 if (FEN[++i] == ' ')
                 {
-                    RET_SLOT |= ply << 2;
+                    game_flags[1] = ply;
                     ++i;
                 }
                 else
@@ -397,5 +394,4 @@ unsigned load_FEN(char FEN[96])
 	    } while (i == i);
         return (move);
 	}
-    return (RET_SLOT);
 }
