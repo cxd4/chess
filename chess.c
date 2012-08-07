@@ -45,6 +45,7 @@ int load_FEN(char FEN[96])
        025,021,022, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 };
     int ep_file[16] = {-1,0,1,2,3,4,5,6,7,-1,-1,-1,-1,-1,-1,-1};
     int ep_rank[16] = {-1,-1,-1,5,-1,-1,2,-1,-1,-1,-1,-1,-1,-1,-1,-1};
+    int dec_fig[16] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, -1, -1, -1, -1, -1, -1};
     /* array look-up tables to instantaneously assign conditional integers */
 
     FEN[92] =  ' '; /* to prevent the next loop from looping indefinitely */
@@ -235,6 +236,26 @@ int load_FEN(char FEN[96])
         return -19;
     }
 
+    char_reg = FEN[++i] ^ 0x30;
+    char_reg = dec_fig[char_reg];
+    if (char_reg == -1)
+    {
+        return -20;
+    }
+    FEN[++i] ^= 0x30;
+    if (FEN[i] == 0x10) {}
+    else
+    {
+        if (char_reg == 0)
+        {
+            return -21;
+        }
+        char_reg = dec_fig[FEN[i]];
+        if (char_reg == -1)
+        {
+            return -22;
+        }
+    }
     if ((FEN[++i] & 0xF0) == 0x30)
     {
         register int ply = FEN[i] & 0x0F;
@@ -276,30 +297,23 @@ int load_FEN(char FEN[96])
     }
 
     /* field 6:  fullmove clock */
-    char_reg = 0;
     do
     {
+        int move;
         if (FEN[++i] == '\0')
         {
-            if (char_reg == 0)
+            if (move == 0)
             {
                 return -24;
             }
-            return (char_reg);
+            return (move);
         }
-        char_reg = char_reg * 10;
-        if ((FEN[i] & 0xF0) == '0')
+        move = move * 10;
+        char_reg = dec_fig[FEN[i] ^ 0x30];
+        if (char_reg == -1)
         {
-            FEN[i] = FEN[i] & 0x0F;
-            if (FEN[i] > 9)
-            {
-                return -25;
-            }
-            char_reg = char_reg + FEN[i];
+            return -25;
         }
-        else
-        {
-            return -26;
-        }
+        move = move + char_reg;
     } while (i == i);
 }
