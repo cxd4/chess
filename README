@@ -48,11 +48,40 @@ one's existence is) will result in truncation down to ninety-two characters and
 its consequential invalidity.  The FEN record is allocated into a ninety-six-
 byte buffer, but the last four bytes are reserved for ending the string buffer.
 
-Since the user-specified string for the FEN record is read from left-to-right,
-any data after an array of characters that is interpreted as a valid FEN record
-may precede any junk bytes trailing off at the end for whatever reason.  The
-user-specified string will always be truncated down to ninety-two characters
-and appended with string safety information to become ninety-six bytes wide.
+Return Values for FEN Record Loader
+--------------------------------------------------------------------------------
+Calling the program to load a FEN record to the internal game memory storage is
+done by the method load_FEN().  The return slot of this function contains a
+positive value if the function succeeds:  the fullmove clock number of how many
+moves have ellapsed in the game history so far.  If the value sent back is
+negative, the function did not succeed, due most likely to user error.  For the
+reference of future vendors using this source code, here is a list of all error
+codes that may be returned and their reasons for being sent.
+(The field delimiter between all six parts of the string is exactly one space.)
+    ret Cause of Error Signal
+    --- ------------------------------------------------------------------------
+     -1 '0' was specified in Forsyth's notation.  Only '12345678' are valid.
+     -2 Rank was not terminated soon enough.  Use '/' to avoid buffer overflow.
+     -3 Since the current character is not a decimal digit ('0' through '9'),
+        it is assumed that assigning a piece to the board was intended.  The
+        program could not identify the piece symbol in the record as valid.
+     -4 All sixty-four squares are defined, but the field delimiter is missing.
+     -5 Exactly eight squares of rank mapped but missing '/' delimiter.
+     -6 Neither 'w' nor 'b' was specified in the active color data field.
+     -7 Either 'w' or 'b' was specified but missing field delimiter.
+     -8 All castling was disabled (iff. '-') but field delimiter expected.
+     -9 Castling enabled (iff. "KQkq"/"KQk"?) but invalidly terminated field.
+    -10 Some castling was enabled ("KQq"/"KQ"?) but invalidly terminated field.
+    -11 Some castling was enabled ("Kkq"/"Kk"?) but invalidly terminated field.
+    -12 Some castling was enabled ("Kq"/"K"?) but invalidly terminated field.
+    -13 Some castling was enabled ("Qkq"/"Qk"?) but invalidly terminated field.
+    -14 Some castling was enabled ("Qq"/"Q"?) but invalidly terminated field.
+    -15 Some castling was enabled ("kq"/"k"?) but invalidly terminated field.
+    -16 Castling on Black's Queen's side enabled but invalidly terminated field.
+    -17 Failure to define valid file for en passant target square ('abcdefgh').
+    -18 Unacceptable rank digit for en passant:  either '3' or '6' is required.
+    -19 Missing field delimiter after data field for en passant target.
+    ... [to do]
 
 Binary Encoding of Positions
 --------------------------------------------------------------------------------
