@@ -236,84 +236,46 @@ int load_FEN(char FEN[96])
         return -19;
     }
 
-    char_reg = FEN[++i] ^ 0x30;
-    char_reg = dec_fig[char_reg];
-    if (char_reg == -1)
+    do
     {
-        return -20;
-    }
-    FEN[++i] ^= 0x30;
-    if (FEN[i] == 0x10) {}
-    else
-    {
-        if (char_reg == 0)
+        if (FEN[++i] == ' ')
         {
-            return -21;
+            if (FEN[i - 1] == ' ')
+            { /* silly, cheap trick by using two spaces in a row */
+                return -20;
+            }
+            if (game_flags[1] > 50)
+            {
+                return -21;
+            }
+            break;
         }
-        char_reg = dec_fig[FEN[i]];
+        game_flags[1] *= 10;
+        char_reg = dec_fig[FEN[i] ^ 0x30];
         if (char_reg == -1)
         {
             return -22;
         }
-    }
-    if ((FEN[++i] & 0xF0) == 0x30)
-    {
-        register int ply = FEN[i] & 0x0F;
-        if (ply > 9)
-        {
-            return -20;
-        }
-
-        if (FEN[++i] == ' ')
-        {
-            game_flags[2] = ply;
-        }
-        else if ((FEN[i] & 0xF0) == 0x30)
-        {
-            char_reg = FEN[i] & 0x0F;
-            if (char_reg > 9)
-            {
-                return -21;
-            }
-            else
-            {
-                ply = ply * 10;
-                ply = ply + char_reg; /* cannot assume:  ply |= char_reg */
-                if (ply > 50)
-                { /* illegal position:  Fifty Move Draw Rule */
-                    return -22;
-                }
-
-                if (FEN[++i] == ' ')
-                {
-                    game_flags[1] = ply;
-                }
-                else
-                { /* A third digit means it's greater than 50. */
-                    return -23;
-                }
-            }
-        }
-    }
+        game_flags[1] += char_reg;
+    } while (i == i);
 
     /* field 6:  fullmove clock */
     do
     {
-        int move;
         if (FEN[++i] == '\0')
         {
-            if (move == 0)
+            if (game_flags[2] == 0)
             {
-                return -24;
+                return -23;
             }
-            return (move);
+            return 0;
         }
-        move = move * 10;
+        game_flags[2] *= 10;
         char_reg = dec_fig[FEN[i] ^ 0x30];
         if (char_reg == -1)
         {
-            return -25;
+            return -24;
         }
-        move = move + char_reg;
+        game_flags[2] += char_reg;
     } while (i == i);
 }
