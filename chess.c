@@ -126,107 +126,93 @@ int load_FEN(char FEN[96])
     /* field 3:  castling availability */
     if (FEN[++i] == ' ') {}
     else return -7;
-    switch (FEN[++i]) {
-        case '-':
-            if (FEN[++i] == ' ') break;
-            return -8;
-        case 'K':
-            game[7][6] |= 0x20;
-            switch (FEN[++i]) {
-                case ' ':  break;
-                case 'Q':
-                    game[7][2] |= 0x20;
-                    switch (FEN[++i]) {
-                        case ' ':  break;
-                        case 'k':
-                            game[0][6] |= 0x20;
-                            switch (FEN[++i]) {
-                                case ' ':  break;
-                                case 'q':
-                                    game[0][2] |= 0x20;
-                                    if (FEN[++i] == ' ') break;
-                                default:  return -9;
-                            }
-                            break;
-                        case 'q':
-                            game[0][2] |= 0x20;
-                            if (FEN[++i] == ' ') break;
-                        default:  return -10;
-                    }
-                    break;
-                case 'k':
-                    game[0][6] |= 0x20;
-                    switch (FEN[++i]) {
-                        case ' ':  break;
-                        case 'q':
-                            game[0][2] |= 0x20;
-                            if (FEN[++i] == ' ') break;
-                        default:  return -11;
-                    }
-                    break;
-                case 'q':
-                    game[0][2] |= 0x20;
-                    if (FEN[++i] == ' ') break;
-                default:  return -12;
-            }
-            break;
-        case 'Q':
-            game[7][2] |= 0x20;
-            switch (FEN[++i]) {
-                case ' ':  break;
-                case 'k':
-                    game[0][6] |= 0x20;
-                    switch (FEN[++i]) {
-                        case ' ':  break;
-                        case 'q':
-                            game[0][2] |= 0x20;
-                            if (FEN[++i] == ' ') break;
-                        default:  return -13;
-                    }
-                    break;
-                case 'q':
-                    game[0][2] |= 0x20;
-                    if (FEN[++i] == ' ') break;
-                default:  return -14;
-            }
-            break;
-        case 'k':
-            game[0][6] |= 0x20;
-            switch (FEN[++i]) {
-                case ' ':  break;
-                case 'q':
-                    game[0][2] |= 0x20;
-                    if (FEN[++i] == ' ') break;
-                default:  return -15;
-            }
-            break;
-        case 'q':
-            game[0][2] |= 0x20;
-            if (FEN[++i] == ' ') break;
-        default:
-            return -16;
+	if (FEN[++i] == '-')
+    {
+		if (FEN[++i] == ' ') {}
+		else return -8;
     }
+	else
+	{
+        char castle_K[128] = {
+            -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+            -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+            -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+            -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+            -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 32, -1, -1, -1, -1,
+            -1,  0, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+            -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,  0, -1, -1, -1, -1,
+			-1,  0, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 };
+        char castle_Q[128] = {
+            -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+            -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+            -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+            -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+            -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+            -1, 32, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+            -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,  0, -1, -1, -1, -1,
+			-1,  0, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 };
+        char castle_k[128] = {
+            -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+            -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+            -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+            -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+            -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+            -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+            -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 32, -1, -1, -1, -1,
+			-1,  0, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 };
+        char castle_q[128] = {
+            -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+            -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+            -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+            -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+            -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+            -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+            -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+			-1, 32, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 };
+        if (castle_K[FEN[i]] == -1) return -8;
+        game[7][6] |= castle_K[FEN[i]];
+		if (FEN[++i] == ' ') {}
+		else
+		{
+            if (castle_Q[FEN[i]] == -1) return -9;
+            game[7][2] |= castle_Q[FEN[i]];
+			if (FEN[++i] == ' ') {}
+			else
+			{
+                if (castle_k[FEN[i]] == -1) return -10;
+                game[0][6] |= castle_k[FEN[i]];
+				if (FEN[++i] == ' ') {}
+				else
+				{
+                    if (castle_q[FEN[i]] == -1) return -11;
+                    game[0][2] |= castle_q[FEN[i]];
+					if (FEN[++i] == ' ') {}
+					else return -12;
+				}
+			}
+		}
+	}
 
     /* field 4:  en passant target square */
     if (FEN[++i] == '-') {}
     else
     {
         file = ep_file[FEN[i]];
-        if (file == -1) return -17;
+        if (file == -1) return -13;
         rank = ep_rank[FEN[++i]];
-        if (rank == -1) return -18;
+        if (rank == -1) return -14;
         game[file][rank] |= 0x40; /* en passant destination flag */
     }
 
     /* field 5:  halfmove clock */
     if (FEN[++i] == ' ') {}
-    else return -19;
+    else return -15;
     do
     {
-        if (dec_fig[FEN[++i]] == -1) return -20;
+        if (dec_fig[FEN[++i]] == -1) return -16;
         if (FEN[i] == ' ')
         {
-            if (game_flags[1] > 50) return -21;
+            if (game_flags[1] > 50) return -17;
             break;
         }
         game_flags[1] *= 10;
@@ -236,10 +222,10 @@ int load_FEN(char FEN[96])
     /* field 6:  fullmove clock */
     do
     {
-        if (dec_fig[FEN[++i]] == -1) return -22;
+        if (dec_fig[FEN[++i]] == -1) return -18;
         if (FEN[i] == '\0')
         {
-            if (game_flags[2] == 0) return -23;
+            if (game_flags[2] == 0) return -19;
             break;
         }
         game_flags[2] *= 10;
