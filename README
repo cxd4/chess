@@ -81,7 +81,13 @@ codes that may be returned and their reasons for being sent.
     -17 Failure to define valid file for en passant target square ('abcdefgh').
     -18 Unacceptable rank digit for en passant:  either '3' or '6' is required.
     -19 Missing field delimiter after data field for en passant target.
-    ... [to do]
+    -20 One or more digits of data field 5 were not valid digits ('0123456789').
+    -21 ASCII-to-decimal conversion result violates the Fifty Move Draw Rule.
+    -22 One or more digits of data field 6 were not valid digits ('0123456789').
+    -23 User tried to set the fullmove clock to 0; this is not a valid move no..
+
+Examples (of these^ and how to repair them):
+/* to do, or I change my mind and delete this, too tired to decide now lol */
 
 Binary Encoding of Positions
 --------------------------------------------------------------------------------
