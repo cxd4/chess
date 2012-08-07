@@ -230,7 +230,10 @@ int load_FEN(char FEN[96])
     }
 
     /* field 5:  halfmove clock */
-    if (FEN[++i] == ' ') {}
+    if (FEN[++i] == ' ')
+    {
+        ++i;
+    }
     else
     {
         return -19;
@@ -238,44 +241,42 @@ int load_FEN(char FEN[96])
 
     do
     {
+        char_reg = dec_fig[FEN[i] ^ 0x30];
+        if (char_reg == -1)
+        {
+            return -20;
+        }
+        game_flags[1] *= 10;
+        game_flags[1] += char_reg;
         if (FEN[++i] == ' ')
         {
-            if (FEN[i - 1] == ' ')
-            { /* silly, cheap trick by using two spaces in a row */
-                return -20;
-            }
             if (game_flags[1] > 50)
             {
                 return -21;
             }
+            ++i;
             break;
         }
-        game_flags[1] *= 10;
-        char_reg = dec_fig[FEN[i] ^ 0x30];
-        if (char_reg == -1)
-        {
-            return -22;
-        }
-        game_flags[1] += char_reg;
     } while (i == i);
 
     /* field 6:  fullmove clock */
     do
     {
+        char_reg = dec_fig[FEN[i] ^ 0x30];
+        if (char_reg == -1)
+        {
+            return -22;
+        }
+        game_flags[2] *= 10;
+        game_flags[2] += char_reg;
         if (FEN[++i] == '\0')
         {
             if (game_flags[2] == 0)
             {
                 return -23;
             }
-            return 0;
+            break;
         }
-        game_flags[2] *= 10;
-        char_reg = dec_fig[FEN[i] ^ 0x30];
-        if (char_reg == -1)
-        {
-            return -24;
-        }
-        game_flags[2] += char_reg;
     } while (i == i);
+    return 0;
 }
