@@ -1,3 +1,4 @@
+#define _CRT_SECURE_NO_WARNINGS
 #include <stdio.h>
 #include "chess.h"
 
@@ -17,11 +18,15 @@ int main(int argc, char *argv[])
             return 1;
         }
     }
+
     load_Forsyth();
-    printf("game_flags[0] == %i\n", game_flags[0]);
-    printf("game_flags[1] == %i\n", game_flags[1]);
-    printf("game_flags[2] == %i\n", game_flags[2]);
-    printf("game_flags[3] == %i\n", game_flags[3]);
+    printf("%s\n\n", board);
+    if (argc == 3)
+    {
+        FILE *stream = fopen("position.txt", "w");
+        fprintf(stream, board);
+        fclose(stream);
+    }
     getchar();
     return 0;
 }

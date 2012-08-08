@@ -14,11 +14,12 @@ char board[128] = {
     ". . . . . . . .\n"
     ". . . . . . . .\n"
     ". . . . . . . .\n"
-    ". . k . . . . .\n"
     ". . . . . . . .\n"
-    "K . . . . . . .\n"
-    ". . . q . . . ." };
+    ". . . . . . . .\n"
+    ". . . . . . . .\n"
+    ". . . . . . . ." };
 
+void analyze(void);
 int load_FEN(char *FEN);
 void load_Forsyth(void);
 
@@ -246,6 +247,4 @@ void load_Forsyth(void)
             ++file;
         }
     } while (i == i);
-    printf("%s\n\n", board);
-    return;
 }
