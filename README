@@ -62,32 +62,24 @@ codes that may be returned and their reasons for being sent.
     --- ------------------------------------------------------------------------
      -1 '0' was specified in Forsyth's notation.  Only '12345678' are valid.
      -2 Rank was not terminated soon enough.  Use '/' to avoid buffer overflow.
-     -3 Since the current character is not a decimal digit ('0' through '9'),
-        it is assumed that assigning a piece to the board was intended.  The
-        program could not identify the piece symbol in the record as valid.
+     -3 Could not identify square value definition to a valid piece.
      -4 All sixty-four squares are defined, but the field delimiter is missing.
      -5 Exactly eight squares of rank mapped but missing '/' delimiter.
      -6 Neither 'w' nor 'b' was specified in the active color data field.
      -7 Either 'w' or 'b' was specified but missing field delimiter.
      -8 All castling was disabled (iff. '-') but field delimiter expected.
-     -9 Castling enabled (iff. "KQkq"/"KQk"?) but invalidly terminated field.
-    -10 Some castling was enabled ("KQq"/"KQ"?) but invalidly terminated field.
-    -11 Some castling was enabled ("Kkq"/"Kk"?) but invalidly terminated field.
-    -12 Some castling was enabled ("Kq"/"K"?) but invalidly terminated field.
-    -13 Some castling was enabled ("Qkq"/"Qk"?) but invalidly terminated field.
-    -14 Some castling was enabled ("Qq"/"Q"?) but invalidly terminated field.
-    -15 Some castling was enabled ("kq"/"k"?) but invalidly terminated field.
-    -16 Castling on Black's Queen's side enabled but invalidly terminated field.
-    -17 Failure to define valid file for en passant target square ('abcdefgh').
-    -18 Unacceptable rank digit for en passant:  either '3' or '6' is required.
-    -19 Missing field delimiter after data field for en passant target.
-    -20 One or more digits of data field 5 were not valid digits ('0123456789').
-    -21 ASCII-to-decimal conversion result violates the Fifty Move Draw Rule.
-    -22 One or more digits of data field 6 were not valid digits ('0123456789').
-    -23 User tried to set the fullmove clock to 0; this is not a valid move no..
-
-Examples (of these^ and how to repair them):
-/* to do, or I change my mind and delete this, too tired to decide now lol */
+     -9 Castling was not disabled; the first field digit is invalid.
+    -10 Castling was not disabled; the second field digit is invalid.
+    -11 Castling was not disabled; the third field digit is invalid.
+    -12 Castling was not disabled; the fourth field digit is invalid.
+    -13 All castling was enabled (iff. "KQkq") but field delimiter expected.
+    -14 Failure to define valid file for en passant target square ('abcdefgh').
+    -15 Unacceptable rank digit for en passant:  either '3' or '6' is required.
+    -16 Missing field delimiter after data field for en passant target.
+    -17 One or more digits of data field 5 were not valid digits ('0123456789').
+    -18 ASCII-to-decimal conversion result violates the Fifty Move Draw Rule.
+    -19 One or more digits of data field 6 were not valid digits ('0123456789').
+    -20 User tried to set the fullmove clock to 0; this is not a valid move no.
 
 Binary Encoding of Positions
 --------------------------------------------------------------------------------
