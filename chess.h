@@ -159,25 +159,25 @@ int load_FEN(char *FEN)
             -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
             -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
             -1, 32, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 };
-        if (castle_K[FEN[i]] == -1) return -8;
+        if (castle_K[FEN[i]] == -1) return -9;
         game[7][6] |= castle_K[FEN[i]];
         if (FEN[++i] == ' ') {}
         else
         {
-            if (castle_Q[FEN[i]] == -1) return -9;
+            if (castle_Q[FEN[i]] == -1) return -10;
             game[7][2] |= castle_Q[FEN[i]];
             if (FEN[++i] == ' ') {}
             else
             {
-                if (castle_k[FEN[i]] == -1) return -10;
+                if (castle_k[FEN[i]] == -1) return -11;
                 game[0][6] |= castle_k[FEN[i]];
                 if (FEN[++i] == ' ') {}
                 else
                 {
-                    if (castle_q[FEN[i]] == -1) return -11;
+                    if (castle_q[FEN[i]] == -1) return -12;
                     game[0][2] |= castle_q[FEN[i]];
                     if (FEN[++i] == ' ') {}
-                    else return -12;
+                    else return -13;
                 }
             }
         }
@@ -188,21 +188,21 @@ int load_FEN(char *FEN)
     else
     {
         file = ep_file[FEN[i]];
-        if (file == -1) return -13;
+        if (file == -1) return -14;
         rank = ep_rank[FEN[++i]];
-        if (rank == -1) return -14;
+        if (rank == -1) return -15;
         game[file][rank] |= 0x40; /* en passant destination flag */
     }
 
     /* field 5:  halfmove clock */
     if (FEN[++i] == ' ') {}
-    else return -15;
+    else return -16;
     do
     {
-        if (dec_fig[FEN[++i]] == -1) return -16;
+        if (dec_fig[FEN[++i]] == -1) return -17;
         if (FEN[i] == ' ')
         {
-            if (game_flags[1] > 50) return -17;
+            if (game_flags[1] > 50) return -18;
             break;
         }
         game_flags[1] *= 10;
@@ -212,10 +212,10 @@ int load_FEN(char *FEN)
     /* field 6:  fullmove clock */
     do
     {
-        if (dec_fig[FEN[++i]] == -1) return -18;
+        if (dec_fig[FEN[++i]] == -1) return -19;
         if (FEN[i] == '\0')
         {
-            if (game_flags[2] == 0) return -19;
+            if (game_flags[2] == 0) return -20;
             break;
         }
         game_flags[2] *= 10;
