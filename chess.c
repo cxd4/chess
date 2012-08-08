@@ -1,36 +1,46 @@
 #include <stdio.h>
 
+char board[128] = { /* ASCII chess board testing */
+    ". . . . . . . .\n"
+    ". . . . . . . .\n"
+    ". . . . . . . .\n"
+    ". . . . . . . .\n"
+    ". . k . . . . .\n"
+    ". . . . . . . .\n"
+    "K . . . . . . .\n"
+    ". . . q . . . ." };
 char game[8][8] =
 { /* QR    QN    QB     Q     K    KB    KN    KR */
-    0x02, 0x04, 0x23, 0x01, 0x00, 0x03, 0x24, 0x02, /* rank 1 */
-    0x05, 0x05, 0x05, 0x05, 0x05, 0x05, 0x05, 0x05, /* rank 2 */
-    0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, /* rank 3 */
-    0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, /* rank 4 */
-    0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, /* rank 5 */
-    0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, /* rank 6 */
-    0x15, 0x15, 0x15, 0x15, 0x15, 0x15, 0x15, 0x15, /* rank 7 */
-    0x12, 0x14, 0x33, 0x11, 0x10, 0x13, 0x34, 0x12  /* rank 8 */
+    0x7F, 0x7F, 0x7F, 0x7F, 0x7F, 0x7F, 0x7F, 0x7F, /* rank 1 */
+    0x7F, 0x7F, 0x7F, 0x7F, 0x7F, 0x7F, 0x7F, 0x7F, /* rank 2 */
+    0x7F, 0x7F, 0x7F, 0x7F, 0x7F, 0x7F, 0x7F, 0x7F, /* rank 3 */
+    0x7F, 0x7F, 0x7F, 0x7F, 0x7F, 0x7F, 0x7F, 0x7F, /* rank 4 */
+    0x7F, 0x7F, 0x7F, 0x7F, 0x7F, 0x7F, 0x7F, 0x7F, /* rank 5 */
+    0x7F, 0x7F, 0x7F, 0x7F, 0x7F, 0x7F, 0x7F, 0x7F, /* rank 6 */
+    0x7F, 0x7F, 0x7F, 0x7F, 0x7F, 0x7F, 0x7F, 0x7F, /* rank 7 */
+    0x7F, 0x7F, 0x7F, 0x7F, 0x7F, 0x7F, 0x7F, 0x7F  /* rank 8 */
 };
 int game_flags[4]; /* active color, halfmove clock, fullmove clock, draw data */
-
 int load_FEN(char FEN[96]);
+void load_Forsyth(void);
+
 int main(int argc, char *argv[])
 {
-    char board[128] = { /* ASCII chess board testing */
-        ". . . . . . . .\n"
-        ". . . . . . . .\n"
-        ". . . . . . . .\n"
-        ". . . . . . . .\n"
-        ". . k . . . . .\n"
-        ". . . . . . . .\n"
-        "K . . . . . . .\n"
-        ". . . q . . . ." };
-    printf(board);
-    printf("\n\nBlack to win in two moves.\n\n");
     if (argc == 2)
     {
-        printf("load_FEN(argv[1]) == %i\n", load_FEN(argv[1]));
+        if (load_FEN(argv[1]) == 0) {}
+        else
+        {
+            printf("(%i):  FEN record is corrupt!\n\n", load_FEN(argv[1]));
+            return 1;
+        }
     }
+    else
+    {
+        load_FEN("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
+    }
+    load_Forsyth();
+    printf(board);
     return 0;
 }
 
@@ -89,7 +99,12 @@ int load_FEN(char FEN[96])
         { /* number of squares before next piece or end of rank */
             register int square_offset = FEN[i] & 0x000F;
             if (square_offset == 0) return -1;
-            file = file + square_offset;
+            do
+            {
+                game[file++][rank] = 0x0F;
+                --square_offset;
+                if (square_offset == 0) break;
+            } while (square_offset == square_offset);
             if (file > 8) return -2;
         }
         else
@@ -232,4 +247,78 @@ int load_FEN(char FEN[96])
         game_flags[2] += dec_fig[FEN[i]];
     } while (i == i);
     return 0;
+}
+void load_Forsyth(void)
+{
+    char pieces[80] = {
+        'K', 'Q', 'R', 'B', 'N', 'P', -1, -1, -1, -1, -1, -1, -1, -1, -1, '.',
+        'k', 'q', 'r', 'b', 'n', 'p', -1, -1, -1, -1, -1, -1, -1, -1, -1, '.',
+        'K', 'Q', 'R', 'B', 'N', 'P', -1, -1, -1, -1, -1, -1, -1, -1, -1, '.',
+        'k', 'q', 'r', 'b', 'n', 'p', -1, -1, -1, -1, -1, -1, -1, -1, -1, '.',
+        'K', 'Q', 'R', 'B', 'N', 'P', -1, -1, -1, -1, -1, -1, -1, -1, -1, '.' };
+    board  [0] = pieces[game[0][7]]; /* a8 */
+    board  [2] = pieces[game[1][7]]; /* b8 */
+    board  [4] = pieces[game[2][7]]; /* c8 ... */
+    board  [6] = pieces[game[3][7]];
+    board  [8] = pieces[game[4][7]];
+    board [10] = pieces[game[5][7]];
+    board [12] = pieces[game[6][7]];
+    board [14] = pieces[game[7][7]]; /* ... h8 */
+    board [16] = pieces[game[0][6]]; /* a7 */
+    board [18] = pieces[game[1][6]]; /* b7 ... */
+    board [20] = pieces[game[2][6]];
+    board [22] = pieces[game[3][6]];
+    board [24] = pieces[game[4][6]];
+    board [26] = pieces[game[5][6]];
+    board [28] = pieces[game[6][6]];
+    board [30] = pieces[game[7][6]];
+    board [32] = pieces[game[0][5]];
+    board [34] = pieces[game[1][5]];
+    board [36] = pieces[game[2][5]];
+    board [38] = pieces[game[3][5]];
+    board [40] = pieces[game[4][5]];
+    board [42] = pieces[game[5][5]];
+    board [44] = pieces[game[6][5]];
+    board [46] = pieces[game[7][5]];
+    board [48] = pieces[game[0][4]];
+    board [50] = pieces[game[1][4]];
+    board [52] = pieces[game[2][4]];
+    board [54] = pieces[game[3][4]];
+    board [56] = pieces[game[4][4]];
+    board [58] = pieces[game[5][4]];
+    board [60] = pieces[game[6][4]];
+    board [62] = pieces[game[7][4]];
+    board [64] = pieces[game[0][3]];
+    board [66] = pieces[game[1][3]];
+    board [68] = pieces[game[2][3]];
+    board [70] = pieces[game[3][3]];
+    board [72] = pieces[game[4][3]];
+    board [74] = pieces[game[5][3]];
+    board [76] = pieces[game[6][3]];
+    board [78] = pieces[game[7][3]];
+    board [80] = pieces[game[0][2]];
+    board [82] = pieces[game[1][2]];
+    board [84] = pieces[game[2][2]];
+    board [86] = pieces[game[3][2]];
+    board [88] = pieces[game[4][2]];
+    board [90] = pieces[game[5][2]];
+    board [92] = pieces[game[6][2]];
+    board [94] = pieces[game[7][2]];
+    board [96] = pieces[game[0][1]];
+    board [98] = pieces[game[1][1]];
+    board[100] = pieces[game[2][1]];
+    board[102] = pieces[game[3][1]];
+    board[104] = pieces[game[4][1]];
+    board[106] = pieces[game[5][1]];
+    board[108] = pieces[game[6][1]];
+    board[110] = pieces[game[7][1]];
+    board[112] = pieces[game[0][0]];
+    board[114] = pieces[game[1][0]];
+    board[116] = pieces[game[2][0]];
+    board[118] = pieces[game[3][0]];
+    board[120] = pieces[game[4][0]];
+    board[122] = pieces[game[5][0]]; /* ... f1 */
+    board[124] = pieces[game[6][0]]; /* g1 */
+    board[126] = pieces[game[7][0]]; /* h1 */
+    return;
 }
