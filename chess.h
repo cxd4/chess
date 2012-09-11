@@ -134,10 +134,10 @@ int load_FEN(char *FEN)
                 else
                 {
                     if (FEN[i] == 'q')
-					{
+                    {
                         game[0][2] |= 0x20;
-					}
-					else return -12;
+                    }
+                    else return -12;
                     if (FEN[++i] == ' ') {}
                     else return -13;
                 }
