@@ -77,7 +77,7 @@ int test_Queen(int file, int rank)
 int test_rook(int file, int rank)
 {
     register int x, y;
-    const int threatened_player = get_player_by_square();
+    const int threatened_player = get_player_by_square(file, rank);
 
 horz_left:
     for (x = file - 1; x >= 0; x--)
@@ -172,7 +172,7 @@ vert_up:
 int test_bishop(int file, int rank)
 {
     register int x, y;
-    const int threatened_player = get_player_by_square();
+    const int threatened_player = get_player_by_square(file, rank);
 
 lo_left:
     for (x = file - 1, y = rank - 1; x >= 0 && y >= 0; x--, y--)
@@ -267,7 +267,7 @@ hi_right:
 int test_pawn(int file, int rank)
 {
     int left, right;
-    const int threatened_player = get_player_by_square();
+    const int threatened_player = get_player_by_square(file, rank);
 
 #if (NUMBER_OF_COLORS > 2)
 /* hm...sideways-moving pawns of different player colors? */
@@ -341,7 +341,7 @@ int test_King(int file, int rank)
     static char adjacent_squares[3][3];
     int upper, right, lower, left;
     register int x, y;
-    const int threatened_player = get_player_by_square();
+    const int threatened_player = get_player_by_square(file, rank);
 
 #if defined(ASSUME_MEMORY_ALLOCATION_OUTSIDE_OF_BOUNDS)
     upper = lower = right = left = 1;
