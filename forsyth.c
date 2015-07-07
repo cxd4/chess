@@ -3,6 +3,7 @@
 
 #include "forsyth.h"
 
+square board[BOARD_SIZE][BOARD_SIZE];
 game_status game_state;
 
 char board_ASCII[2 * BOARD_SIZE * BOARD_SIZE] = {

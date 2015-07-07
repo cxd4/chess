@@ -4,7 +4,7 @@
 
 int in_check(int player)
 {
-    char key;
+    square key;
     int is_in_check;
     register int file, rank;
 
@@ -339,7 +339,7 @@ no_wpawn_threats:
 int test_knight(int file, int rank)
 {
     static coordinates neighbors[8];
-    char enemy_knight;
+    square enemy_knight;
     register int i;
     const int threatened_player = get_player_by_square(file, rank);
 
@@ -462,7 +462,7 @@ int test_knight(int file, int rank)
 
 int test_King(int file, int rank)
 {
-    static char adjacent_squares[3][3];
+    static square adjacent_squares[3][3];
     int upper, right, lower, left;
     register int x, y;
     const int threatened_player = get_player_by_square(file, rank);

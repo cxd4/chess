@@ -6,7 +6,9 @@ enum {
     BOARD_SIZE
 };
 
-static char board[BOARD_SIZE][BOARD_SIZE];
+typedef signed char square;
+
+extern square board[BOARD_SIZE][BOARD_SIZE];
 #define COORDS(file, rank)      board[(rank) - 1][(file)]
 
 enum {
