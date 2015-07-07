@@ -31,8 +31,8 @@ extern int test_rook(int file, int rank);
 extern int test_bishop(int file, int rank);
 
 /*
- * Does any piece that can move like a pawn threaten this square?
- * (Kings can also move or capture like pawns.)
+ * Do any pawns threaten this square?
+ * (Due to the risk of non-parallel algorithm, only pawn threats count.)
  */
 extern int test_pawn(int file, int rank);
 

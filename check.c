@@ -264,6 +264,78 @@ hi_right:
     return 0;
 }
 
+int test_pawn(int file, int rank)
+{
+    int left, right;
+    const int threatened_player = get_player_by_square();
+
+#if (NUMBER_OF_COLORS > 2)
+/* hm...sideways-moving pawns of different player colors? */
+#error Only White and Black pawn directions are implemented.
+#endif
+
+#if defined(ASSUME_MEMORY_ALLOCATION_OUTSIDE_OF_BOUNDS)
+    right = left = 1;
+#else
+    left  = (file > 0) ? 1 : 0;
+    right = (file < BOARD_SIZE - 1) ? 1 : 0;
+#endif
+
+/*
+ * to the lower-left and lower-right of the square (White pawn threats)
+ */
+    if (rank <= 0) /* Maybe (rank < 2), since White pawns can't be on rank 1. */
+        goto no_wpawn_threats;
+    if (board[rank - 1 + (1 - left)][file - left] == WHITE_PAWN)
+        if (threatened_player != WHITE)
+            return 1;
+    if (board[rank - 1 + (1 - right)][file + right] == WHITE_PAWN)
+        if (threatened_player != WHITE)
+            return 1;
+
+/*
+ * Can the pawn vertically advance to this square without capturing?
+ * We don't really care about these tests since they don't help mate checks.
+ */
+    if (board[rank][file] != BLANK_SQUARE) /* Pawns can't capture vertically. */
+        goto no_wpawn_threats;
+    if (board[rank - 1][file] == WHITE_PAWN)
+        return 1;
+
+    if (rank == 4 - 1) /* Modern FIDE rules:  Pawns can advance two squares. */
+        if (board[2 - 1][file] == WHITE_PAWN) /* ... if pawn hasn't moved */
+            if (board[3 - 1][file] == BLANK_SQUARE) /* if nothing interposes */
+                return 1;
+
+no_wpawn_threats:
+/*
+ * to the upper-left and upper-right of the square (Black pawn threats)
+ */
+    if (rank >= BOARD_SIZE - 1) /* maybe (BOARD_SIZE - 2) ... */
+        return 0;
+    if (board[rank + 1 - (1 - left)][file - left] == BLACK_PAWN)
+        if (threatened_player != BLACK)
+            return 1;
+    if (board[rank + 1 - (1 - right)][file + right] == BLACK_PAWN)
+        if (threatened_player != BLACK)
+            return 1;
+
+/*
+ * Can the pawn vertically advance to this square without capturing?
+ * Again, these tests are rather useless to checkmate analysis.
+ */
+    if (board[rank][file] != BLANK_SQUARE) /* Pawns can't capture vertically. */
+        return 0;
+    if (board[rank + 1][file] == BLACK_PAWN)
+        return 1;
+
+    if (rank == BOARD_SIZE - 1 - 3)
+        if (board[BOARD_SIZE - 1 - 1][file] == BLACK_PAWN)
+            if (board[BOARD_SIZE - 1 - 2][file] == BLANK_SQUARE)
+                return 1;
+    return 0;
+}
+
 int test_King(int file, int rank)
 {
     static char adjacent_squares[3][3];
