@@ -336,6 +336,130 @@ no_wpawn_threats:
     return 0;
 }
 
+int test_knight(int file, int rank)
+{
+    static coordinates neighbors[8];
+    char enemy_knight;
+    register int i;
+    const int threatened_player = get_player_by_square(file, rank);
+
+    switch (threatened_player)
+    {
+    case WHITE:
+        enemy_knight = BLACK_KNIGHT;
+        break;
+    case BLACK:
+        enemy_knight = WHITE_KNIGHT;
+        break;
+    default:
+#if (NUMBER_OF_COLORS > 2)
+     /* ??? */
+#endif
+        return (enemy_knight = -1);
+    }
+
+/*
+ * 1 o'clock
+ */
+    i = 0;
+    neighbors[i].file = file + 1;
+    neighbors[i].rank = rank + 2;
+    if (neighbors[i].file >= BOARD_SIZE || neighbors[i].rank >= BOARD_SIZE)
+    { /* test nullified:  No piece can capture itself or take its own square. */
+        neighbors[i].file = file;
+        neighbors[i].rank = rank;
+    }
+
+/*
+ * 2 o'clock
+ */
+    ++i;
+    neighbors[i].file = file + 2;
+    neighbors[i].rank = rank + 1;
+    if (neighbors[i].file >= BOARD_SIZE || neighbors[i].rank >= BOARD_SIZE)
+    {
+        neighbors[i].file = file;
+        neighbors[i].rank = rank;
+    }
+
+/*
+ * 4 o'clock
+ */
+    ++i;
+    neighbors[i].file = file + 2;
+    neighbors[i].rank = rank - 1;
+    if (neighbors[i].file >= BOARD_SIZE || neighbors[i].rank < 0)
+    {
+        neighbors[i].file = file;
+        neighbors[i].rank = rank;
+    }
+
+/*
+ * 5 o'clock
+ */
+    ++i;
+    neighbors[i].file = file + 1;
+    neighbors[i].rank = rank - 2;
+    if (neighbors[i].file >= BOARD_SIZE || neighbors[i].rank < 0)
+    {
+        neighbors[i].file = file;
+        neighbors[i].rank = rank;
+    }
+
+/*
+ * 7 o'clock
+ */
+    ++i;
+    neighbors[i].file = file - 1;
+    neighbors[i].rank = rank - 2;
+    if (neighbors[i].file < 0 || neighbors[i].rank < 0)
+    {
+        neighbors[i].file = file;
+        neighbors[i].rank = rank;
+    }
+
+/*
+ * 8 o'clock
+ */
+    ++i;
+    neighbors[i].file = file - 2;
+    neighbors[i].rank = rank - 1;
+    if (neighbors[i].file < 0 || neighbors[i].rank < 0)
+    {
+        neighbors[i].file = file;
+        neighbors[i].rank = rank;
+    }
+
+/*
+ * 10 o'clock
+ */
+    ++i;
+    neighbors[i].file = file - 2;
+    neighbors[i].rank = rank + 1;
+    if (neighbors[i].file < 0 || neighbors[i].rank >= BOARD_SIZE)
+    {
+        neighbors[i].file = file;
+        neighbors[i].rank = rank;
+    }
+
+/*
+ * 11 o'clock
+ */
+    ++i;
+    neighbors[i].file = file - 1;
+    neighbors[i].rank = rank + 2;
+    if (neighbors[i].file < 0 || neighbors[i].rank >= BOARD_SIZE)
+    {
+        neighbors[i].file = file;
+        neighbors[i].rank = rank;
+    }
+
+    for (i = 0; i < 8; i++)
+        if (board[neighbors[i].rank][neighbors[i].file] == enemy_knight)
+            return 1;
+    return 0;
+}
+
 int test_King(int file, int rank)
 {
     static char adjacent_squares[3][3];
