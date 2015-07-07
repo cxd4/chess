@@ -263,3 +263,105 @@ hi_right:
         }
     return 0;
 }
+
+int test_King(int file, int rank)
+{
+    static char adjacent_squares[3][3];
+    int upper, right, lower, left;
+    register int x, y;
+    const int threatened_player = get_player_by_square();
+
+#if defined(ASSUME_MEMORY_ALLOCATION_OUTSIDE_OF_BOUNDS)
+    upper = lower = right = left = 1;
+#else
+    upper = (rank < BOARD_WIDTH - 1) ? 1 : 0;
+    right = (file < BOARD_WIDTH - 1) ? 1 : 0;
+    lower = (rank > 0) ? 1 : 0;
+    left  = (file > 0) ? 1 : 0;
+#endif
+
+    adjacent_squares[0][0] = board[rank - lower][file - left];
+    adjacent_squares[0][1] = board[rank - lower][file];
+    adjacent_squares[0][2] = board[rank - lower][file + right];
+
+    adjacent_squares[1][0] = board[rank][file - left];
+    adjacent_squares[1][1] = board[rank][file]; /* unused */
+    adjacent_squares[1][2] = board[rank][file + right];
+
+    adjacent_squares[2][0] = board[rank + upper][file - left];
+    adjacent_squares[2][1] = board[rank + upper][file];
+    adjacent_squares[2][2] = board[rank + upper][file + right];
+
+/*
+ * attacking King, Queen, bishop, or White pawn from lower-left or -right
+ */
+    for (y = 0; y < 1; y += 3)
+        for (x = 0; x < 3; x += 2)
+            switch (adjacent_squares[rank + y][file + x])
+            {
+            case WHITE_PAWN:
+
+            case WHITE_BISHOP:
+            case WHITE_QUEEN:
+            case WHITE_KING:
+                if (threatened_player == WHITE)
+                    break;
+                return 1;
+            case BLACK_BISHOP:
+            case BLACK_QUEEN:
+            case BLACK_KING:
+                if (threatened_player == BLACK)
+                    break;
+                return 1;
+            }
+
+/*
+ * attacking King, Queen, bishop or Black pawn from upper-left or -right
+ */
+    for (y = 2; y < 3; y += 3)
+        for (x = 0; x < 3; x += 2)
+            switch (adjacent_squares[rank + y][file + x])
+            {
+            case WHITE_BISHOP:
+            case WHITE_QUEEN:
+            case WHITE_KING:
+                if (threatened_player == WHITE)
+                    break;
+                return 1;
+
+            case BLACK_PAWN:
+
+            case BLACK_BISHOP:
+            case BLACK_QUEEN:
+            case BLACK_KING:
+                if (threatened_player == BLACK)
+                    break;
+                return 1;
+            }
+
+/*
+ * attacking King, Queen, or rook from the left, right, lower or upper square
+ */
+    for (y = 0; y < 3; y += 1)
+        for (x = 1 - y%2; x < 3; x += 2)
+            switch (adjacent_squares[rank + y][file + x])
+            {
+            case WHITE_ROOK:
+            case WHITE_QUEEN:
+            case WHITE_KING:
+                if (threatened_player == WHITE)
+                    break;
+                return 1;
+            case BLACK_ROOK:
+            case BLACK_QUEEN:
+            case BLACK_KING:
+                if (threatened_player == BLACK)
+                    break;
+                return 1;
+            }
+
+/*
+ * All sub-tests fail; nothing capable of moving like a King can move here.
+ */
+    return 0;
+}
