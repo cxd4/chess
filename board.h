@@ -24,10 +24,12 @@ enum {
     board[((name)/BOARD_SIZE) % BOARD_SIZE][BOARD_SIZE]
 
 typedef struct {
-    int origin_file;
-    int origin_rank;
-    int target_file;
-    int target_rank;
+    int file, rank;
+} coordinates;
+
+typedef struct {
+    coordinates origin;
+    coordinates target;
 } move_storage;
 
 #endif
