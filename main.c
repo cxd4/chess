@@ -30,12 +30,7 @@ int main(int argc, char* argv[])
         return (FEN_status);
     }
 
-    load_Forsyth();
-    if (argc < 3)
-        stream = stdout;
-    else
-        stream = fopen(argv[2], "w");
-    fprintf(stream, "%s\n\n", board_ASCII);
+    load_Forsyth((argc < 3) ? stdout : fopen(argv[2], "w"));
     fclose(stream);
     return 0;
 }

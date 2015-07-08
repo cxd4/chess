@@ -13,6 +13,8 @@ typedef struct {
     int fullmove_clock;
 } game_status;
 
+extern game_status game_state;
+
 extern int load_FEN(char * FEN);
 extern void load_Forsyth(void);
 

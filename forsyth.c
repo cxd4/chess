@@ -1,3 +1,5 @@
+#include <stdio.h>
+
 #include "board.h"
 #include "pieces.h"
 
@@ -5,17 +7,6 @@
 
 square board[BOARD_SIZE][BOARD_SIZE];
 game_status game_state;
-
-char board_ASCII[2 * BOARD_SIZE * BOARD_SIZE] = {
-    ". . . . . . . .\n"
-    ". . . . . . . .\n"
-    ". . . . . . . .\n"
-    ". . . . . . . .\n"
-    ". . . . . . . .\n"
-    ". . . . . . . .\n"
-    ". . . . . . . .\n"
-    ". . . . . . . ."
-};
 
 /*
  * 9/11/2012
@@ -47,7 +38,7 @@ static const char LUT_pieces[128] = {
                  -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
 };
 
-void load_Forsyth(void)
+void load_Forsyth(FILE * stream)
 {
     register int i;
     register int file, rank;
@@ -67,8 +58,9 @@ void load_Forsyth(void)
     rank = 7;
 
     do {
-        board_ASCII[i] = pieces[board[rank][file]];
-        i = i + 2;
+        fputc(pieces[board[rank][file]], stream);
+        fputc(' ', stream);
+        i = i + 1;
         if (file == 7)
         {
             if (rank == 0)
@@ -81,6 +73,7 @@ void load_Forsyth(void)
             ++file;
         }
     } while (i == i);
+    return;
 }
 
 /*
