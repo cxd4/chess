@@ -6,6 +6,17 @@ enum {
     BOARD_SIZE
 };
 
+static const char files[BOARD_SIZE] = {
+    'a', /* QR */
+    'b', /* QKt */
+    'c', /* QB */
+    'd', /* Q */
+    'e', /* K */
+    'f', /* KB */
+    'g', /* KKt */
+    'h', /* KR */
+};
+
 typedef signed char square;
 
 extern square board[BOARD_SIZE][BOARD_SIZE];

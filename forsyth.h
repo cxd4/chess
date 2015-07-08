@@ -3,6 +3,9 @@
 
 #include <stdio.h>
 
+#define MAX_FORSYTH_SIZE    72
+/* "11111111/11111111/11111111/11111111/11111111/11111111/11111111/11111111" */
+
 typedef struct {
     int K, Q, k, q;
 } castling_capabilities;
