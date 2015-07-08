@@ -7,11 +7,11 @@ int main(int argc, char* argv[])
     int FEN_status;
 
     if (argc < 2)
-        fen_status = load_FEN(
+        FEN_status = load_FEN(
             "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
         );
     else
-        ret_val = load_FEN(argv[1]);
+        FEN_status = load_FEN(argv[1]);
 
 #if defined(TEST_MATE_IN_ONE)
     memcpy(&square(a8), "nk....bq", 8);
@@ -24,10 +24,10 @@ int main(int argc, char* argv[])
     memcpy(&square(a1), "QB....KN", 8);
 #endif
 
-    if (fen_status != FEN_OK)
+    if (FEN_status != FEN_OK)
     {
-        fprintf(stderr, "(%i):  FEN record is corrupt!\n\n", fen_status);
-        return (fen_status);
+        fprintf(stderr, "(%i):  FEN record is corrupt!\n\n", FEN_status);
+        return (FEN_status);
     }
 
     load_Forsyth();
