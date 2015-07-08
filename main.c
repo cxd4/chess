@@ -10,7 +10,16 @@ int main(int argc, char* argv[])
 
     if (argc < 2)
         FEN_status = load_FEN(
-            "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
+            "rnbqkbnr/"\
+            "pppppppp/"\
+            "8/"\
+            "8/"\
+            "8/"\
+            "8/"\
+            "PPPPPPPP/"
+            "RNBQKBNR "
+
+            "w KQkq - 0 1"
         );
     else
         FEN_status = load_FEN(argv[1]);
