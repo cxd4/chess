@@ -40,39 +40,27 @@ static const char LUT_pieces[128] = {
 
 void load_Forsyth(FILE * stream)
 {
-    register int i;
+    static char pieces[128];
     register int file, rank;
-    static char pieces[80] = {
-        'K', 'Q', 'R', 'B', 'N', 'P', -1, -1, -1, -1, -1, -1, -1, -1, -1, '.',
-        'k', 'q', 'r', 'b', 'n', 'p', -1, -1, -1, -1, -1, -1, -1, -1, -1, '.',
-        'K', 'Q', 'R', 'B', 'N', 'P', -1, -1, -1, -1, -1, -1, -1, -1, -1, '.',
-        'k', 'q', 'r', 'b', 'n', 'p', -1, -1, -1, -1, -1, -1, -1, -1, -1, '.',
-        '*',  -1,  -1,  -1,  -1,  -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, '*',
-    };
 
-    i = 0;
-/*
- * Beginning from square "a8", as FEN originates from Black's end.
- */
-    file = 0;
-    rank = 7;
+    pieces[WHITE_KING]   = 'K'; pieces[BLACK_KING]   = 'k';
+    pieces[WHITE_QUEEN]  = 'Q'; pieces[BLACK_QUEEN]  = 'q';
+    pieces[WHITE_ROOK]   = 'R'; pieces[BLACK_ROOK]   = 'r';
+    pieces[WHITE_BISHOP] = 'B'; pieces[BLACK_BISHOP] = 'p';
+    pieces[WHITE_KNIGHT] = 'N'; pieces[BLACK_KNIGHT] = 'n';
+    pieces[WHITE_PAWN]   = 'P'; pieces[BLACK_PAWN]   = 'p';
+    pieces[BLANK_SQUARE] = '.'; /* compatible formatting to GNU Chess */
 
-    do {
-        fputc(pieces[board[rank][file]], stream);
-        fputc(' ', stream);
-        i = i + 1;
-        if (file == 7)
+    rank = BOARD_SIZE;
+    while (--rank >= 0)
+    {
+        for (file = 0; file < BOARD_SIZE; file++)
         {
-            if (rank == 0)
-                break;
-            file = 0;
-            --rank;
+            fputc(pieces[board[rank][file]], stream);
+            fputc(' ', stream);
         }
-        else
-        {
-            ++file;
-        }
-    } while (i == i);
+        fputc('\n', stream);
+    }
     return;
 }
 
