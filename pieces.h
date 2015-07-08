@@ -45,7 +45,7 @@ enum {
     BLACK_KNIGHT = WHITE_KNIGHT ^ COLOR_CASE,
     BLACK_PAWN   = WHITE_PAWN ^ COLOR_CASE,
 
-	BLANK_SQUARE = '.'
+    BLANK_SQUARE = '.'
 };
 
 #endif
