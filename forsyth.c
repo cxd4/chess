@@ -223,12 +223,12 @@ int load_FEN(char * FEN)
             return -FEN_PLY_UNREADABLE;
         if (FEN[i] == ' ')
         {
-            if (game_state.Ply[1] <= 50)
+            if (game_state.Ply <= 50)
                 break;
             return -FEN_PLY_COUNT_EXCEEDS_FIFTY_MOVE_DRAW_RULE;
         }
-        game_state.Ply[1] *= 10;
-        game_state.Ply[1] += (FEN[i] - '0') % 10;
+        game_state.Ply *= 10;
+        game_state.Ply += (FEN[i] - '0') % 10;
     } while (i == i);
 
     /* field 6:  fullmove clock */
@@ -240,12 +240,12 @@ int load_FEN(char * FEN)
         ++i;
         if (FEN[i] == '\0')
         {
-            if (game_state.fullmove_clock[2] != 0)
+            if (game_state.fullmove_clock != 0)
                 break;
             return -FEN_IMPOSSIBLE_CLOCK_VALUE;
         }
-        game_state.fullmove_clock[2] *= 10;
-        game_state.fullmove_clock[2] += (FEN[i] - '0') % 10;
+        game_state.fullmove_clock *= 10;
+        game_state.fullmove_clock += (FEN[i] - '0') % 10;
     } while (i == i);
     return FEN_OK;
 }
