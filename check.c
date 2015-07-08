@@ -470,8 +470,8 @@ int test_King(int file, int rank)
 #if defined(ASSUME_MEMORY_ALLOCATION_OUTSIDE_OF_BOUNDS)
     upper = lower = right = left = 1;
 #else
-    upper = (rank < BOARD_WIDTH - 1) ? 1 : 0;
-    right = (file < BOARD_WIDTH - 1) ? 1 : 0;
+    upper = (rank < BOARD_SIZE - 1) ? 1 : 0;
+    right = (file < BOARD_SIZE - 1) ? 1 : 0;
     lower = (rank > 0) ? 1 : 0;
     left  = (file > 0) ? 1 : 0;
 #endif
