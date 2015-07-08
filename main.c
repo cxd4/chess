@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include "forsyth.h"
 
+#include "check.h"
+
 int main(int argc, char* argv[])
 {
     FILE * stream;
@@ -33,5 +35,10 @@ int main(int argc, char* argv[])
     stream = (argc < 3) ? stdout : fopen(argv[2], "w");
     load_Forsyth(stream);
     fclose(stream);
+
+    if (in_check(WHITE))
+        puts("White is in check.");
+    if (in_check(BLACK))
+        puts("Black is in check.");
     return 0;
 }
