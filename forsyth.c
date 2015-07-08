@@ -210,20 +210,19 @@ int load_FEN(char * FEN)
     /* field 5:  halfmove clock */
     ++i;
 
-    if (FEN[i] != ' ')
+    if (FEN[i++] != ' ')
         return -FEN_NO_DELIMITER_TO_PLY;
     do {
-        ++i;
         if (FEN[i] < '0' || FEN[i] > '9')
             return -FEN_PLY_UNREADABLE;
+        game_state.Ply *= 10;
+        game_state.Ply += (FEN[i++] - '0') % 10;
         if (FEN[i] == ' ')
         {
             if (game_state.Ply <= 50)
                 break;
             return -FEN_PLY_COUNT_EXCEEDS_FIFTY_MOVE_DRAW_RULE;
         }
-        game_state.Ply *= 10;
-        game_state.Ply += (FEN[i] - '0') % 10;
     } while (i == i);
 
     /* field 6:  fullmove clock */
@@ -232,15 +231,13 @@ int load_FEN(char * FEN)
     do {
         if (FEN[i] < '0' || FEN[i] > '9')
             return -FEN_NO_DELIMITER_TO_CLOCK;
-        ++i;
-        if (FEN[i] == '\0')
-        {
-            if (game_state.fullmove_clock != 0)
-                break;
-            return -FEN_IMPOSSIBLE_CLOCK_VALUE;
-        }
         game_state.fullmove_clock *= 10;
-        game_state.fullmove_clock += (FEN[i] - '0') % 10;
+        game_state.fullmove_clock += (FEN[i++] - '0') % 10;
+        if (FEN[i] == '\0')
+            break;
     } while (i == i);
+
+    if (game_state.fullmove_clock == 0)
+        return -FEN_IMPOSSIBLE_CLOCK_VALUE;
     return FEN_OK;
 }
