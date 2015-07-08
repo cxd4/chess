@@ -92,7 +92,8 @@ int load_FEN(char * FEN)
     /* field 1:  piece placement */
     i = 0;
 
-    file = rank = 0;
+    file = 0;
+    rank = BOARD_SIZE - 1; /* Forsyth notation always starts at Black's end. */
     do {
         if (FEN[i] >= '0' && FEN[i] <= '9')
         { /* number of squares before next piece or end of rank */
@@ -116,7 +117,7 @@ int load_FEN(char * FEN)
         }
 
         ++i;
-        if (file == 8)
+        if (file == BOARD_SIZE)
         { /* end of the rank */
             if (rank == 0)
             { /* all sixty-four squares of chess board defined */
