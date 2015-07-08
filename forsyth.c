@@ -46,7 +46,7 @@ void load_Forsyth(FILE * stream)
     pieces[WHITE_KING]   = 'K'; pieces[BLACK_KING]   = 'k';
     pieces[WHITE_QUEEN]  = 'Q'; pieces[BLACK_QUEEN]  = 'q';
     pieces[WHITE_ROOK]   = 'R'; pieces[BLACK_ROOK]   = 'r';
-    pieces[WHITE_BISHOP] = 'B'; pieces[BLACK_BISHOP] = 'p';
+    pieces[WHITE_BISHOP] = 'B'; pieces[BLACK_BISHOP] = 'b';
     pieces[WHITE_KNIGHT] = 'N'; pieces[BLACK_KNIGHT] = 'n';
     pieces[WHITE_PAWN]   = 'P'; pieces[BLACK_PAWN]   = 'p';
     pieces[BLANK_SQUARE] = '.'; /* compatible formatting to GNU Chess */
