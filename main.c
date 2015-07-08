@@ -30,7 +30,8 @@ int main(int argc, char* argv[])
         return (FEN_status);
     }
 
-    load_Forsyth((argc < 3) ? stdout : fopen(argv[2], "w"));
+    stream = (argc < 3) ? stdout : fopen(argv[2], "w");
+    load_Forsyth(stream);
     fclose(stream);
     return 0;
 }

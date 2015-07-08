@@ -21,8 +21,9 @@ int in_check(int player)
         return -1;
     }
 
-    for (rank = 0; rank < BOARD_SIZE; rank++)
-        for (file = 0; file < BOARD_SIZE; file++)
+    rank = file = -1;
+    while (++rank < BOARD_SIZE)
+        while (++file < BOARD_SIZE)
             if (board[rank][file] == key)
                 break;
     if (file >= BOARD_SIZE || rank >= BOARD_SIZE)
@@ -79,7 +80,6 @@ int test_rook(int file, int rank)
     register int x, y;
     const int threatened_player = get_player_by_square(file, rank);
 
-horz_left:
     for (x = file - 1; x >= 0; x--)
         switch (board[rank][x])
         {
@@ -174,7 +174,6 @@ int test_bishop(int file, int rank)
     register int x, y;
     const int threatened_player = get_player_by_square(file, rank);
 
-lo_left:
     for (x = file - 1, y = rank - 1; x >= 0 && y >= 0; x--, y--)
         switch (board[y][x])
         {

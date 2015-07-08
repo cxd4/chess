@@ -1,6 +1,8 @@
 #ifndef _FORSYTH_H_
 #define _FORSYTH_H_
 
+#include <stdio.h>
+
 typedef struct {
     int K, Q, k, q;
 } castling_capabilities;
@@ -16,7 +18,7 @@ typedef struct {
 extern game_status game_state;
 
 extern int load_FEN(char * FEN);
-extern void load_Forsyth(void);
+extern void load_Forsyth(FILE * stream);
 
 enum {
     FEN_OK,

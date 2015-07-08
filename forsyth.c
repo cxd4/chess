@@ -92,6 +92,7 @@ int load_FEN(char * FEN)
     /* field 1:  piece placement */
     i = 0;
 
+    file = rank = 0;
     do {
         if (FEN[i] >= '0' && FEN[i] <= '9')
         { /* number of squares before next piece or end of rank */
