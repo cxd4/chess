@@ -151,7 +151,7 @@ int is_legal_move(int x1, int y1, int x2, int y2)
             for (xt = x1 - 1, yt = y1 - 1; xt > x2 && yt > y2; xt--, yt--)
                 if (board[yt][xt] != BLANK_SQUARE)
                     return 0;
-        if (y2 < y1 && x2 < x1) /* quadrant IV, range check to lower-right */
+        if (y2 < y1 && x2 > x1) /* quadrant IV, range check to lower-right */
             for (xt = x1 + 1, yt = y1 - 1; xt < x2 && yt > y2; xt++, yt--)
                 if (board[yt][xt] != BLANK_SQUARE)
                     return 0;
