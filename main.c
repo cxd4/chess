@@ -43,7 +43,8 @@ int main(int argc, char* argv[])
 
     stream = (argc < 3) ? stdout : fopen(argv[2], "w");
     load_Forsyth(stream);
-    fclose(stream);
+    if (stream != stdout)
+        fclose(stream);
 
     if (in_check(WHITE))
         puts("White is in check.");
