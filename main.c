@@ -12,7 +12,6 @@ int main(int argc, char* argv[])
     FILE * stream;
     int FEN_status;
     int legal_moves;
-    register int i;
 
     load_LUTs();
     if (argc < 2)
@@ -55,22 +54,8 @@ int main(int argc, char* argv[])
 
     move_list = (move_storage *)malloc(0);
     legal_moves = enum_moves(&move_list[0]);
-    printf("Total of %i legal moves:\n", legal_moves);
-    for (i = 0; i < legal_moves; i++)
-    {
-        const int x1 = move_list[i].origin.file;
-        const int y1 = move_list[i].origin.rank;
-        const int x2 = move_list[i].target.file;
-        const int y2 = move_list[i].target.rank;
-
-        printf(
-            "    % 3i.  %c%c%d:%c%d\n",
-            i + 1,
-            algebraic_prefixes[board[y1][x1]],
-            files[x1], y1 + 1,
-            files[x2], y2 + 1
-        );
-    }
+    printf("Total of %i legal moves.\n", legal_moves);
+    show_moves(move_list, legal_moves);
 
     if (in_check(WHITE))
         puts("White is in check.");

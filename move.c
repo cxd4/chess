@@ -35,6 +35,30 @@ int enum_moves(move_storage * list)
     return (legal_moves);
 }
 
+int show_moves(move_storage * list, int limit)
+{
+    register int i;
+
+    if (limit <= 0)
+        limit = enum_moves(list);
+    for (i = 0; i < limit; i++)
+    {
+        const int x1 = list[i].origin.file;
+        const int y1 = list[i].origin.rank;
+        const int x2 = list[i].target.file;
+        const int y2 = list[i].target.rank;
+
+        printf(
+            "    % 3i.  %c%c%d:%c%d\n",
+            i + 1,
+            algebraic_prefixes[board[y1][x1]],
+            files[x1], y1 + 1,
+            files[x2], y2 + 1
+        );
+    }
+    return (i);
+}
+
 int is_legal_move(int x1, int y1, int x2, int y2)
 {
     square backup;
