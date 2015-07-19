@@ -58,10 +58,12 @@ int main(int argc, char* argv[])
     for (i = 0; i < legal_moves; i++)
         printf(
             "    % 3i.  %c%c%d:%c%d\n",
-            i,
-            LUT_pieces[board[move_list->origin.file][move_list->origin.rank]],
-            files[move_list->origin.file], move_list->origin.rank,
-            files[move_list->target.file], move_list->target.rank
+            i + 1,
+            LUT_pieces[
+                board[move_list[i].origin.file][move_list[i].origin.rank]
+            ],
+            files[move_list[i].origin.file], move_list[i].origin.rank + 1,
+            files[move_list[i].target.file], move_list[i].target.rank + 1
         );
 
     if (in_check(WHITE))
