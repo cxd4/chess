@@ -111,35 +111,45 @@ int load_FEN(char * FEN)
     }
     else
     {
-        signed char LUT_castling[128] = { -1 };
+        game_state.castling.K
+      = game_state.castling.Q
+      = game_state.castling.k
+      = game_state.castling.q
+      = 0;
 
-        LUT_castling['K'] = 32;
-        LUT_castling['Q'] = 32;
-        LUT_castling['k'] = 32;
-        LUT_castling['q'] = 32;
-        if (LUT_castling[FEN[i]] < 0)
+        if (FEN[i] == 'K')
+            game_state.castling.K = 1;
+        else if (FEN[i] == 'Q')
+            game_state.castling.Q = 1;
+        else if (FEN[i] == 'k')
+            game_state.castling.k = 1;
+        else if (FEN[i] == 'q')
+            game_state.castling.q = 1;
+        else
             return -FEN_UNREADABLE_CASTLING_PRIVILEGES;
 
-        SQUARE(g8) |= LUT_castling[FEN[i]];
-        if (FEN[++i] != ' ')
-        {
-            LUT_castling['K'] = -1;
-            LUT_castling['Q'] = 0x20;
-            if (LUT_castling[FEN[i]] < 0)
+        if (FEN[++i] != ' ') {
+            if (FEN[i] == 'Q')
+                game_state.castling.Q = 1;
+            else if (FEN[i] == 'k')
+                game_state.castling.k = 1;
+            else if (FEN[i] == 'q')
+                game_state.castling.q = 1;
+            else
                 return -FEN_KQ_UNREADABLE_CASTLING;
-            game_state.castling.q = LUT_castling[FEN[i]];
-            if (FEN[++i] != ' ')
-            {
-                LUT_castling['Q'] = -1;
-                LUT_castling['k'] = 0x20;
-                if (LUT_castling[FEN[i]] < 0)
+
+            if (FEN[++i] != ' ') {
+                if (FEN[i] == 'k')
+                    game_state.castling.k = 1;
+                else if (FEN[i] == 'q')
+                    game_state.castling.q = 1;
+                else
                     return -FEN_QK_UNREADABLE_CASTLING;
-                SQUARE(g1) |= LUT_castling[FEN[i]];
-                if (FEN[++i] != ' ')
-                {
+
+                if (FEN[++i] != ' ') {
                     if (FEN[i] != 'q')
                         return -FEN_Q_UNREADABLE_CASTLING;
-                    game_state.castling.K |= 0x20;
+                    game_state.castling.q = 1;
                     if (FEN[++i] != ' ')
                         return -FEN_NO_DELIMITER_TO_EN_PASSANT;
                 }
