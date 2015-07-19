@@ -160,6 +160,7 @@ int load_FEN(char * FEN)
     /* field 4:  en passant target square */
     ++i;
 
+    game_state.en_passant_file = -1; /* 0 means file 'a'; we want "invalid". */
     if (FEN[i] != '-')
     {
         file = FEN[i] - 'a';
