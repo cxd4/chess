@@ -22,8 +22,8 @@ int in_check(int player)
     }
 
     rank = file = -1;
-    while (++rank < BOARD_SIZE)
-        while (++file < BOARD_SIZE)
+    for (rank = 0; rank < BOARD_SIZE; rank++)
+        for (file = 0; file < BOARD_SIZE; file++)
             if (board[rank][file] == key)
                 goto king_search_finished;
 
