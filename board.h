@@ -40,9 +40,4 @@ typedef struct {
     int file, rank;
 } coordinates;
 
-typedef struct {
-    coordinates origin;
-    coordinates target;
-} move_storage;
-
 #endif

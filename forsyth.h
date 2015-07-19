@@ -3,22 +3,12 @@
 
 #include <stdio.h>
 
+#include "move.h"
+
 #define MAX_FORSYTH_SIZE    72
 /* "11111111/11111111/11111111/11111111/11111111/11111111/11111111/11111111" */
 
-typedef struct {
-    int K, Q, k, q;
-} castling_capabilities;
-
-typedef struct {
-    int player_turn;
-    castling_capabilities castling;
-    int en_passant_file;
-    int Ply; /* halfmove_clock */
-    int fullmove_clock;
-} game_status;
-
-extern game_status game_state;
+extern const char LUT_pieces[];
 
 extern int load_FEN(char * FEN);
 extern void load_Forsyth(FILE * stream);

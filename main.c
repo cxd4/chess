@@ -1,12 +1,17 @@
 #include <stdio.h>
 #include "forsyth.h"
 
+#include "move.h"
 #include "check.h"
+
+move_storage move_list[1];
 
 int main(int argc, char* argv[])
 {
     FILE * stream;
     int FEN_status;
+    int legal_moves;
+    register int i;
 
     if (argc < 2)
         FEN_status = load_FEN(
@@ -45,6 +50,17 @@ int main(int argc, char* argv[])
     load_Forsyth(stream);
     if (stream != stdout)
         fclose(stream);
+
+    legal_moves = enum_moves(&move_list[0]);
+    printf("Total of %i legal moves:\n", legal_moves);
+    for (i = 0; i < legal_moves; i++)
+        printf(
+            "    % 3i.  %c%c%d:%c%d\n",
+            i,
+            LUT_pieces[board[move_list->origin.file][move_list->origin.rank]],
+            files[move_list->origin.file], move_list->origin.rank,
+            files[move_list->target.file], move_list->target.rank
+        );
 
     if (in_check(WHITE))
         puts("White is in check.");

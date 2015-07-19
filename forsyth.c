@@ -6,14 +6,13 @@
 #include "forsyth.h"
 
 square board[BOARD_SIZE][BOARD_SIZE];
-game_status game_state;
 
 /*
  * 9/11/2012
  * to do:  This code sucks and is very old. :) Delete all the things.
  */
 
-static const char LUT_pieces[128] = {
+const char LUT_pieces[] = {
      -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
      -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
      -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
