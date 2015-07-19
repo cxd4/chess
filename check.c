@@ -25,7 +25,9 @@ int in_check(int player)
     while (++rank < BOARD_SIZE)
         while (++file < BOARD_SIZE)
             if (board[rank][file] == key)
-                break;
+                goto king_search_finished;
+
+king_search_finished:
     if (file >= BOARD_SIZE || rank >= BOARD_SIZE)
         return -1; /* no King found--cannot interpret King safety */
 
