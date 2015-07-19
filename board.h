@@ -34,7 +34,7 @@ enum {
     NUMBER_OF_SQUARES
 };
 #define SQUARE(name)            \
-    board[((name)/BOARD_SIZE) % BOARD_SIZE][BOARD_SIZE]
+    board[((name)/BOARD_SIZE) % BOARD_SIZE][(name) % BOARD_SIZE]
 
 typedef struct {
     int file, rank;

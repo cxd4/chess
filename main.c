@@ -31,14 +31,14 @@ int main(int argc, char* argv[])
         FEN_status = load_FEN(argv[1]);
 
 #if defined(TEST_MATE_IN_ONE)
-    memcpy(&square(a8), "nk....bq", 8);
-    memcpy(&square(a7), "ppp.r...", 8);
-    memcpy(&square(a6), "........", 8);
-    memcpy(&square(a5), "........", 8);
-    memcpy(&square(a4), "........", 8);
-    memcpy(&square(a3), "........", 8);
-    memcpy(&square(a2), "...R.PPP", 8);
-    memcpy(&square(a1), "QB....KN", 8);
+    memcpy(&SQUARE(a8), "nk....bq", 8);
+    memcpy(&SQUARE(a7), "ppp.r...", 8);
+    memcpy(&SQUARE(a6), "........", 8);
+    memcpy(&SQUARE(a5), "........", 8);
+    memcpy(&SQUARE(a4), "........", 8);
+    memcpy(&SQUARE(a3), "........", 8);
+    memcpy(&SQUARE(a2), "...R.PPP", 8);
+    memcpy(&SQUARE(a1), "QB....KN", 8);
 #endif
 
     if (FEN_status != FEN_OK)
