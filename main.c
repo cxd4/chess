@@ -66,7 +66,7 @@ int main(int argc, char* argv[])
         printf(
             "    % 3i.  %c%c%d:%c%d\n",
             i + 1,
-            algebraic_prefixes[board[x1][y1]],
+            algebraic_prefixes[board[y1][x1]],
             files[x1], y1 + 1,
             files[x2], y2 + 1
         );
