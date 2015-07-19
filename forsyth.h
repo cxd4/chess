@@ -8,6 +8,7 @@
 #define MAX_FORSYTH_SIZE    72
 /* "11111111/11111111/11111111/11111111/11111111/11111111/11111111/11111111" */
 
+extern char * pieces;
 extern char * algebraic_prefixes;
 
 extern int load_FEN(char * FEN);

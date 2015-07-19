@@ -14,6 +14,7 @@ int main(int argc, char* argv[])
     int legal_moves;
     register int i;
 
+    load_LUTs();
     if (argc < 2)
         FEN_status = load_FEN(
             "rnbqkbnr/"\

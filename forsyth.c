@@ -13,43 +13,9 @@ square board[BOARD_SIZE][BOARD_SIZE];
  * to do:  This code sucks and is very old. :) Delete all the things.
  */
 
-static const char LUT_pieces[] = {
-     -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
-     -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
-     -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
-     -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
-     -1, -1,
-        WHITE_BISHOP,
-                 -1, -1, -1, -1, -1, -1, -1, -1,
-        WHITE_KING,
-                                                     -1, -1,
-        WHITE_KNIGHT,
-                                                                 -1,
-    WHITE_PAWN, WHITE_QUEEN, WHITE_ROOK,
-                 -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
-     -1, -1,
-        BLACK_BISHOP,
-                 -1, -1, -1, -1, -1, -1, -1, -1,
-        BLACK_KING,
-                                                     -1, -1,
-        BLACK_KNIGHT,
-                                                                 -1,
-    BLACK_PAWN, BLACK_QUEEN, BLACK_ROOK,
-                 -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
-};
-
 void load_Forsyth(FILE * stream)
 {
-    static char pieces[128];
     register int file, rank;
-
-    pieces[WHITE_KING]   = 'K'; pieces[BLACK_KING]   = 'k';
-    pieces[WHITE_QUEEN]  = 'Q'; pieces[BLACK_QUEEN]  = 'q';
-    pieces[WHITE_ROOK]   = 'R'; pieces[BLACK_ROOK]   = 'r';
-    pieces[WHITE_BISHOP] = 'B'; pieces[BLACK_BISHOP] = 'b';
-    pieces[WHITE_KNIGHT] = 'N'; pieces[BLACK_KNIGHT] = 'n';
-    pieces[WHITE_PAWN]   = 'P'; pieces[BLACK_PAWN]   = 'p';
-    pieces[BLANK_SQUARE] = '.'; /* compatible formatting to GNU Chess */
 
     rank = BOARD_SIZE;
     while (--rank >= 0)
@@ -99,9 +65,9 @@ int load_FEN(char * FEN)
         }
         else
         { /* letter identifying a piece to assign */
-            if (LUT_pieces[FEN[i]] < 0)
+            if (pieces[FEN[i]] < 0)
                 return -FEN_INVALID_PIECE_LETTER;
-            board[rank][file++] = LUT_pieces[FEN[i]];
+            board[rank][file++] = pieces[FEN[i]];
         }
 
         ++i;
@@ -228,27 +194,27 @@ int load_FEN(char * FEN)
     if (game_state.fullmove_clock == 0)
         return -FEN_IMPOSSIBLE_CLOCK_VALUE;
 
-    load_LUTs();
     return FEN_OK;
 }
 
+char * pieces;
 char * algebraic_prefixes;
 
 void load_LUTs(void)
 {
+    pieces             = (char *)malloc(128);
     algebraic_prefixes = (char *)malloc(128);
 
-    algebraic_prefixes[WHITE_KING]   = 'K';
-    algebraic_prefixes[WHITE_QUEEN]  = 'Q';
-    algebraic_prefixes[WHITE_ROOK]   = 'R';
-    algebraic_prefixes[WHITE_BISHOP] = 'B';
-    algebraic_prefixes[WHITE_KNIGHT] = 'N';
-    algebraic_prefixes[WHITE_PAWN]   = ' ';
+    pieces[WHITE_KING]   = 'K'; pieces[BLACK_KING]   = 'k';
+    pieces[WHITE_QUEEN]  = 'Q'; pieces[BLACK_QUEEN]  = 'q';
+    pieces[WHITE_ROOK]   = 'R'; pieces[BLACK_ROOK]   = 'r';
+    pieces[WHITE_BISHOP] = 'B'; pieces[BLACK_BISHOP] = 'b';
+    pieces[WHITE_KNIGHT] = 'N'; pieces[BLACK_KNIGHT] = 'n';
+    pieces[WHITE_PAWN]   = 'P'; pieces[BLACK_PAWN]   = 'p';
+    pieces[BLANK_SQUARE] = '.'; /* compatible formatting to GNU Chess */
 
-    algebraic_prefixes[BLACK_KING]   = 'K';
-    algebraic_prefixes[BLACK_QUEEN]  = 'Q';
-    algebraic_prefixes[BLACK_ROOK]   = 'R';
-    algebraic_prefixes[BLACK_BISHOP] = 'B';
-    algebraic_prefixes[BLACK_KNIGHT] = 'N';
-    algebraic_prefixes[BLACK_PAWN]   = ' ';
+    memcpy(algebraic_prefixes, pieces, 128);
+    algebraic_prefixes[WHITE_PAWN]
+  = algebraic_prefixes[BLACK_PAWN]
+  = ' ';
 }
