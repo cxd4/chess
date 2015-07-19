@@ -56,15 +56,20 @@ int main(int argc, char* argv[])
     legal_moves = enum_moves(&move_list[0]);
     printf("Total of %i legal moves:\n", legal_moves);
     for (i = 0; i < legal_moves; i++)
+    {
+        const int x1 = move_list[i].origin.file;
+        const int y1 = move_list[i].origin.rank;
+        const int x2 = move_list[i].target.file;
+        const int y2 = move_list[i].target.rank;
+
         printf(
             "    % 3i.  %c%c%d:%c%d\n",
             i + 1,
-            LUT_pieces[
-                board[move_list[i].origin.file][move_list[i].origin.rank]
-            ],
-            files[move_list[i].origin.file], move_list[i].origin.rank + 1,
-            files[move_list[i].target.file], move_list[i].target.rank + 1
+            algebraic_prefixes[board[x1][y1]],
+            files[x1], y1 + 1,
+            files[x2], y2 + 1
         );
+    }
 
     if (in_check(WHITE))
         puts("White is in check.");

@@ -1,3 +1,4 @@
+#include <malloc.h>
 #include <stdio.h>
 
 #include "board.h"
@@ -12,7 +13,7 @@ square board[BOARD_SIZE][BOARD_SIZE];
  * to do:  This code sucks and is very old. :) Delete all the things.
  */
 
-const char LUT_pieces[] = {
+static const char LUT_pieces[] = {
      -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
      -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
      -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
@@ -226,5 +227,28 @@ int load_FEN(char * FEN)
 
     if (game_state.fullmove_clock == 0)
         return -FEN_IMPOSSIBLE_CLOCK_VALUE;
+
+    load_LUTs();
     return FEN_OK;
+}
+
+char * algebraic_prefixes;
+
+void load_LUTs(void)
+{
+    algebraic_prefixes = (char *)malloc(128);
+
+    algebraic_prefixes[WHITE_KING]   = 'K';
+    algebraic_prefixes[WHITE_QUEEN]  = 'Q';
+    algebraic_prefixes[WHITE_ROOK]   = 'R';
+    algebraic_prefixes[WHITE_BISHOP] = 'B';
+    algebraic_prefixes[WHITE_KNIGHT] = 'N';
+    algebraic_prefixes[WHITE_PAWN]   = ' ';
+
+    algebraic_prefixes[BLACK_KING]   = 'K';
+    algebraic_prefixes[BLACK_QUEEN]  = 'Q';
+    algebraic_prefixes[BLACK_ROOK]   = 'R';
+    algebraic_prefixes[BLACK_BISHOP] = 'B';
+    algebraic_prefixes[BLACK_KNIGHT] = 'N';
+    algebraic_prefixes[BLACK_PAWN]   = ' ';
 }
