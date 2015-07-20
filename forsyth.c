@@ -22,12 +22,7 @@ void load_Forsyth(FILE * stream)
     {
         for (file = 0; file < BOARD_SIZE; file++)
         {
-            square position;
-
-            position = board[rank][file];
-            if (position == ' ' || position == pieces[BLANK_SQUARE])
-                position = BLANK_SQUARE;
-            fputc(pieces[position], stream);
+            fputc(pieces[board[rank][file]], stream);
             fputc(' ', stream);
         }
         fputc('\n', stream);
@@ -218,19 +213,21 @@ char * algebraic_prefixes;
 
 void load_LUTs(void)
 {
-    pieces             = (char *)malloc(128);
-    algebraic_prefixes = (char *)malloc(128);
+    const size_t number_of_characters = 128;
 
+    pieces             = (char *)malloc(number_of_characters);
+    algebraic_prefixes = (char *)malloc(number_of_characters);
+
+    memset(pieces, '.', number_of_characters);
     pieces[WHITE_KING]   = 'K'; pieces[BLACK_KING]   = 'k';
     pieces[WHITE_QUEEN]  = 'Q'; pieces[BLACK_QUEEN]  = 'q';
     pieces[WHITE_ROOK]   = 'R'; pieces[BLACK_ROOK]   = 'r';
     pieces[WHITE_BISHOP] = 'B'; pieces[BLACK_BISHOP] = 'b';
     pieces[WHITE_KNIGHT] = 'N'; pieces[BLACK_KNIGHT] = 'n';
     pieces[WHITE_PAWN]   = 'P'; pieces[BLACK_PAWN]   = 'p';
-    pieces[BLANK_SQUARE] = '.'; /* compatible formatting to GNU Chess */
 
-    memcpy(algebraic_prefixes, pieces, 128);
+    memcpy(algebraic_prefixes, pieces, number_of_characters);
     algebraic_prefixes[WHITE_PAWN]
   = algebraic_prefixes[BLACK_PAWN]
-  = ' ';
+  = ' '; /* Pawns are not legally pieces, so they have no algebraic letter. */
 }

@@ -115,6 +115,9 @@ int is_legal_move(int x1, int y1, int x2, int y2)
  */
     switch (board[y1][x1])
     {
+    default: /* probably intended as a blank square, except not BLANK_SQUARE */
+        return 0;
+
     case WHITE_KING:
     case BLACK_KING:
         if (x2 == x1) /* off upwards or downwards by one */
