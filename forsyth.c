@@ -22,7 +22,12 @@ void load_Forsyth(FILE * stream)
     {
         for (file = 0; file < BOARD_SIZE; file++)
         {
-            fputc(pieces[board[rank][file]], stream);
+            square position;
+
+            position = board[rank][file];
+            if (position == ' ' || position == pieces[BLANK_SQUARE])
+                position = BLANK_SQUARE;
+            fputc(pieces[position], stream);
             fputc(' ', stream);
         }
         fputc('\n', stream);
