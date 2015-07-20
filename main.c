@@ -1,4 +1,3 @@
-#include <malloc.h>
 #include <stdio.h>
 #include "forsyth.h"
 
@@ -52,8 +51,7 @@ int main(int argc, char* argv[])
     if (stream != stdout)
         fclose(stream);
 
-    move_list = (move_storage *)malloc(0);
-    legal_moves = enum_moves(&move_list[0]);
+    legal_moves = enum_moves(&move_list);
     printf("Total of %i legal moves.\n", legal_moves);
     show_moves(move_list, legal_moves);
 

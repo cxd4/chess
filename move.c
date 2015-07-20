@@ -7,22 +7,31 @@
 
 game_status game_state;
 
-int enum_moves(move_storage * list)
+int enum_moves(move_storage ** list_address)
 {
+    move_storage * list;
+    void * new_address;
     int x1, y1, x2, y2;
     register int legal_moves;
 
+    if (list_address == NULL)
+        return (legal_moves = 0);
+    list = *(list_address);
+    if (list == NULL)
+        list = (move_storage *)malloc(0);
+
+    *(list_address) = list;
     legal_moves = 0;
     for (y1 = 0; y1 < BOARD_SIZE; y1++)
         for (x1 = 0; x1 < BOARD_SIZE; x1++)
             for (y2 = 0; y2 < BOARD_SIZE; y2++)
                 for (x2 = 0; x2 < BOARD_SIZE; x2++)
                     if (is_legal_move(x1, y1, x2, y2)) {
-                        list = realloc(
-                            &list[0],
+                        new_address = realloc(
+                            list,
                             ++legal_moves * sizeof(move_storage)
                         );
-                        assert(list != NULL);
+                        assert(new_address != NULL);
                         list[legal_moves - 1].origin.file = x1;
                         list[legal_moves - 1].origin.rank = y1;
                         list[legal_moves - 1].target.file = x2;
@@ -40,7 +49,7 @@ int show_moves(move_storage * list, int limit)
     register int i;
 
     if (limit <= 0)
-        limit = enum_moves(list);
+        limit = enum_moves(&list);
     for (i = 0; i < limit; i++)
     {
         const int x1 = list[i].origin.file;
