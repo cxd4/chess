@@ -71,11 +71,23 @@ int show_moves(move_storage * list, int limit)
 int is_legal_move(int x1, int y1, int x2, int y2)
 {
     square backup;
-    double slope; /* for Bishop diagonal tests */
+    double slope;
     int putting_yourself_in_check;
     register int xt, yt;
+    const double infinity = (double)(BOARD_SIZE - 0) / (double)(1 - 0);
     const int moving_piece_color = get_player_by_square(x1, y1);
     const int target_piece_color = get_player_by_square(x2, y2);
+
+    if (x2 == x1)
+        slope =
+            infinity
+          * ((y2 < y1) ? -1. : +1.)
+        ;
+    else
+        slope =
+            (double)(y2 - y1)
+          / (double)(x2 - x1)
+        ;
 
 /*
  * If either the starting or ending squares lie outside the legal boundary of
@@ -130,6 +142,11 @@ int is_legal_move(int x1, int y1, int x2, int y2)
 
     case WHITE_QUEEN:
     case BLACK_QUEEN:
+        if (slope != +1 && slope != -1 /* bishops */
+         && slope !=  0 /* rooks, horizontal */
+         && slope != +infinity && slope != -infinity)
+            return 0;
+     /* Fall through. */
 
     case WHITE_ROOK:
     case BLACK_ROOK:
@@ -160,19 +177,14 @@ int is_legal_move(int x1, int y1, int x2, int y2)
                     return 0;
                 }
         else
-            return 0;
+            if (slope != +1. && slope != -1.)
+                return 0;
 
-        if (board[y1][x1] != WHITE_QUEEN && board[y1][x1] != BLACK_QUEEN)
-            break; /* Do not fall through to do Queen tests. */
+        if (slope == -infinity || slope == 0 || slope == +infinity)
+            break; /* Do not fall through to complete Queen tests. */
 
     case WHITE_BISHOP:
     case BLACK_BISHOP:
-        if (x2 == x1) /* divides by 0, so no bishop testing needed */
-            return 0;
-        slope =
-            (double)(y2 - y1)
-          / (double)(x2 - x1)
-        ;
         if (slope != +1 && slope != -1)
             return 0;
         if (y2 > y1 && x2 > x1) /* quadrant I, range check to upper-right */
