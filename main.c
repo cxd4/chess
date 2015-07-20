@@ -29,17 +29,6 @@ int main(int argc, char* argv[])
     else
         FEN_status = load_FEN(argv[1]);
 
-#if defined(TEST_MATE_IN_ONE)
-    memcpy(&SQUARE(a8), "nk....bq", 8);
-    memcpy(&SQUARE(a7), "ppp.r...", 8);
-    memcpy(&SQUARE(a6), "........", 8);
-    memcpy(&SQUARE(a5), "........", 8);
-    memcpy(&SQUARE(a4), "........", 8);
-    memcpy(&SQUARE(a3), "........", 8);
-    memcpy(&SQUARE(a2), "...R.PPP", 8);
-    memcpy(&SQUARE(a1), "QB....KN", 8);
-#endif
-
     if (FEN_status != FEN_OK)
     {
         fprintf(stderr, "(%i):  FEN record is corrupt!\n\n", FEN_status);
