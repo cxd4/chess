@@ -201,8 +201,9 @@ int is_legal_move(int x1, int y1, int x2, int y2)
 
     case WHITE_PAWN:
         if (distance == 2) /* optional pawn push from start position */
-            if (y1 == -1 + 2 && y2 == y1 + 2)
-                break;
+            if (y2 == y1 + 2 && board[y2][x2] == BLANK_SQUARE)
+                if (y1 == -1 + 2 && board[y1 + 1][x1] == BLANK_SQUARE)
+                    break;
         if (distance == 1) /* pawn advances, without capture */
             if (y2 == y1 + 1 && board[y2][x2] == BLANK_SQUARE)
                 break;
@@ -213,9 +214,10 @@ int is_legal_move(int x1, int y1, int x2, int y2)
                     break;
         return 0;
     case BLACK_PAWN:
-        if (distance == 2)
-            if (y1 == BOARD_SIZE - 2 && y2 == y1 - 2)
-                break;
+        if (distance == 2) /* optional pawn push from start position */
+            if (y2 == y1 - 2 && board[y2][x2] == BLANK_SQUARE)
+                if (y1 == BOARD_SIZE - 2 && board[y1 - 1][x1] == BLANK_SQUARE)
+                    break;
         if (distance == 1)
             if (y2 == y1 - 1 && board[y2][x2] == BLANK_SQUARE)
                 break;
