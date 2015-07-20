@@ -204,7 +204,7 @@ int is_legal_move(int x1, int y1, int x2, int y2)
             if (y1 == -1 + 2 && y2 == y1 + 2)
                 break;
         if (distance == 1) /* pawn advances, without capture */
-            if (y2 == y1 + 1 && board[y1 + 1][x1] == BLANK_SQUARE)
+            if (y2 == y1 + 1 && board[y2][x2] == BLANK_SQUARE)
                 break;
         if (distance == sqrt(2)) /* pawn captures */
             if (y2 == y1 + 1)
@@ -217,7 +217,7 @@ int is_legal_move(int x1, int y1, int x2, int y2)
             if (y1 == BOARD_SIZE - 2 && y2 == y1 - 2)
                 break;
         if (distance == 1)
-            if (y2 == y1 - 1 && board[y1 - 1][x1] == BLANK_SQUARE)
+            if (y2 == y1 - 1 && board[y2][x2] == BLANK_SQUARE)
                 break;
         if (distance == sqrt(2)) /* pawn captures */
             if (y2 == y1 - 1)
