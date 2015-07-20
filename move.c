@@ -1,3 +1,5 @@
+#include <math.h>
+
 #include <assert.h>
 #include <malloc.h>
 #include <stdlib.h>
@@ -71,23 +73,13 @@ int show_moves(move_storage * list, int limit)
 int is_legal_move(int x1, int y1, int x2, int y2)
 {
     square backup;
-    double slope;
+    double slope, distance;
+    int a, b;
     int putting_yourself_in_check;
     register int xt, yt;
     const double infinity = (double)(BOARD_SIZE - 0) / (double)(1 - 0);
     const int moving_piece_color = get_player_by_square(x1, y1);
     const int target_piece_color = get_player_by_square(x2, y2);
-
-    if (x2 == x1)
-        slope =
-            infinity
-          * ((y2 < y1) ? -1. : +1.)
-        ;
-    else
-        slope =
-            (double)(y2 - y1)
-          / (double)(x2 - x1)
-        ;
 
 /*
  * If either the starting or ending squares lie outside the legal boundary of
@@ -102,17 +94,6 @@ int is_legal_move(int x1, int y1, int x2, int y2)
     if (y2 < 0 || y2 >= BOARD_SIZE)
         return 0;
 
-/*
- * "Null" moves, of course, also are not legal in chess.
- * If the starting square is the same as the ending square, there is no move.
- *
- * Maybe this sort of condition is already prevented implicitly by the rest
- * of the algorithm, but it's more readable to check this now.  It also helps
- * speed up the move search analysis due to the liklihood of the condition.
- */
-    if (x1 == x2 && y1 == y2)
-        return 0;
-
     if (board[y1][x1] == BLANK_SQUARE)
         return 0; /* can move to no squares, from an empty square */
 
@@ -122,9 +103,18 @@ int is_legal_move(int x1, int y1, int x2, int y2)
         if (target_piece_color == moving_piece_color)
             return 0; /* Nobody can capture pieces of their own color. */
 
-/*
- * Well, here comes the hard part.  :(
- */
+    a = x2 - x1; /* horizontal leg, if any */
+    b = y2 - y1; /* vertical leg, if any */
+    distance = sqrt(a*a + b*b); /* vector resultant, if not also hypotenuse */
+
+    if (distance == 0)
+        return 0; /* null move */
+
+    if (a == 0)
+        slope = (b < 0) ? -infinity : +infinity;
+    else
+        slope = (double)b / (double)a;
+
     switch (board[y1][x1])
     {
     default: /* probably intended as a blank square, except not BLANK_SQUARE */
@@ -132,12 +122,10 @@ int is_legal_move(int x1, int y1, int x2, int y2)
 
     case WHITE_KING:
     case BLACK_KING:
-        if (x2 == x1) /* off upwards or downwards by one */
-            if (y2 == y1 - 1 || y2 == y1 + 1)
-                break;
-        if (x2 == x1 - 1 || x2 == x1 + 1)
-            if (y2 == y1 - 1 || y2 == y1 + 1 || y2 == y1)
-                break;
+        if (distance == 1) /* up, down, right, left by one */
+            break;
+        if (distance == sqrt(2)) /* diagonally by one */
+            break;
         return 0;
 
     case WHITE_QUEEN:
@@ -207,40 +195,32 @@ int is_legal_move(int x1, int y1, int x2, int y2)
 
     case WHITE_KNIGHT:
     case BLACK_KNIGHT:
-        if (x2 == x1 - 1 || x2 == x1 + 1)
-            if (y2 == y1 - 2 || y2 == y1 + 2)
-                break; /* 1 o'clock, 5 o'clock, 7 o'clock, 11 o'clock */
-        if (x2 == x1 - 2 || x2 == x1 + 2)
-            if (y2 == y1 - 1 || y2 == y1 + 1)
-                break; /* 2 o'clock, 4 o'clock, 8 o'clock, 10 o'clock */
+        if (distance == sqrt(5))
+            break;
         return 0;
 
     case WHITE_PAWN:
-        if (x2 == x1) /* pawn advances, without capture */
-            if (board[y1 + 1][x1] == BLANK_SQUARE) {
-                if (y2 == y1 + 1)
-                    break;
-                if (y2 == y1 + 2) /* optional pawn push from start position */
-                    if (y1 == 1 && board[y1 + 2][x1] == BLANK_SQUARE)
-                        break;
-            }
-        if (y2 == y1 + 1 && x2 != x1) /* pawn captures */
-            if (x2 == x1 - 1 || x2 == x1 + 1)
+        if (distance == 2) /* optional pawn push from start position */
+            if (y1 == -1 + 2 && y2 == y1 + 2)
+                break;
+        if (distance == 1) /* pawn advances, without capture */
+            if (y2 == y1 + 1 && board[y1 + 1][x1] == BLANK_SQUARE)
+                break;
+        if (distance == sqrt(2)) /* pawn captures */
+            if (y2 == y1 + 1)
                 if (board[y2][x1] != BLANK_SQUARE
                  || game_state.en_passant_file == x2 && y2 == BOARD_SIZE - 3)
                     break;
         return 0;
     case BLACK_PAWN:
-        if (x2 == x1)
-            if (board[y1 - 1][x1] == BLANK_SQUARE) {
-                if (y2 == y1 - 1)
-                    break;
-                if (y2 == y1 - 2)
-                    if (y1 == BOARD_SIZE-2 && board[y1 - 2][x1] == BLANK_SQUARE)
-                        break;
-            }
-        if (y2 == y1 - 1 && x2 != x1)
-            if (x2 == x1 - 1 || x2 == x1 + 1)
+        if (distance == 2)
+            if (y1 == BOARD_SIZE - 2 && y2 == y1 - 2)
+                break;
+        if (distance == 1)
+            if (y2 == y1 - 1 && board[y1 - 1][x1] == BLANK_SQUARE)
+                break;
+        if (distance == sqrt(2)) /* pawn captures */
+            if (y2 == y1 - 1)
                 if (board[y2][x1] != BLANK_SQUARE
                  || game_state.en_passant_file == x2 && y2 == -1 + 3)
                     break;
