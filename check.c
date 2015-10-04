@@ -1,3 +1,5 @@
+#include <assert.h>
+
 #include "board.h"
 #include "pieces.h"
 #include "check.h"
@@ -61,8 +63,10 @@ int get_player_by_square(int file, int rank)
     case BLACK_PAWN:
         return BLACK;
 
-    case BLANK_SQUARE:
     default:
+        assert(board[rank][file] == BLANK_SQUARE);
+     /* Fall through. */
+    case BLANK_SQUARE:
         return (game_state.player_turn);
     }
 }
