@@ -492,56 +492,52 @@ int test_King(int file, int rank)
 /*
  * attacking King, Queen, bishop, or White pawn from lower-left or -right
  */
-    for (y = 0; y < 1; y += 3)
-        for (x = 0; x < 3; x += 2)
-            switch (adjacent_squares[rank + y][file + x])
-            {
-            case WHITE_PAWN:
+    for (x = 0; x < 3; x += 2)
+        switch (adjacent_squares[0][x]) {
+        case WHITE_PAWN:
 
-            case WHITE_BISHOP:
-            case WHITE_QUEEN:
-            case WHITE_KING:
-                if (threatened_player == WHITE)
-                    break;
-                return 1;
-            case BLACK_BISHOP:
-            case BLACK_QUEEN:
-            case BLACK_KING:
-                if (threatened_player == BLACK)
-                    break;
-                return 1;
-            }
+        case WHITE_BISHOP:
+        case WHITE_QUEEN:
+        case WHITE_KING:
+            if (threatened_player == WHITE)
+                break;
+            return 1;
+        case BLACK_BISHOP:
+        case BLACK_QUEEN:
+        case BLACK_KING:
+            if (threatened_player == BLACK)
+                break;
+            return 1;
+        }
 
 /*
  * attacking King, Queen, bishop or Black pawn from upper-left or -right
  */
-    for (y = 2; y < 3; y += 3)
-        for (x = 0; x < 3; x += 2)
-            switch (adjacent_squares[rank + y][file + x])
-            {
-            case WHITE_BISHOP:
-            case WHITE_QUEEN:
-            case WHITE_KING:
-                if (threatened_player == WHITE)
-                    break;
-                return 1;
+    for (x = 0; x < 3; x += 2)
+        switch (adjacent_squares[2][x]) {
+        case WHITE_BISHOP:
+        case WHITE_QUEEN:
+        case WHITE_KING:
+            if (threatened_player == WHITE)
+                break;
+            return 1;
 
-            case BLACK_PAWN:
+        case BLACK_PAWN:
 
-            case BLACK_BISHOP:
-            case BLACK_QUEEN:
-            case BLACK_KING:
-                if (threatened_player == BLACK)
-                    break;
-                return 1;
-            }
+        case BLACK_BISHOP:
+        case BLACK_QUEEN:
+        case BLACK_KING:
+            if (threatened_player == BLACK)
+                break;
+            return 1;
+        }
 
 /*
  * attacking King, Queen, or rook from the left, right, lower or upper square
  */
     for (y = 0; y < 3; y += 1)
-        for (x = 1 - y%2; x < 3; x += 2)
-            switch (adjacent_squares[rank + y][file + x])
+        for (x = 1 - y%2; x < 3; x += 2) /* x = ~y & 1, if 2's cmpl. */
+            switch (adjacent_squares[y][x])
             {
             case WHITE_ROOK:
             case WHITE_QUEEN:
