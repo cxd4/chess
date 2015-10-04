@@ -65,9 +65,9 @@ int load_FEN(char * FEN)
         }
         else
         { /* letter identifying a piece to assign */
-            if (pieces[FEN[i]] < 0)
+            if (FEN[i] < 0 || pieces[(unsigned char)FEN[i]] < 0)
                 return -FEN_INVALID_PIECE_LETTER;
-            board[rank][file++] = pieces[FEN[i]];
+            board[rank][file++] = pieces[(unsigned char)FEN[i]];
         }
 
         ++i;
