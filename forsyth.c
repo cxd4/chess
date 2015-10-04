@@ -1,6 +1,9 @@
 #include <malloc.h>
 #include <stdio.h>
 
+/* memcpy() and memset() */
+#include <string.h>
+
 #include "board.h"
 #include "pieces.h"
 
@@ -217,8 +220,8 @@ void load_LUTs(void)
 
     pieces             = (char *)malloc(number_of_characters);
     algebraic_prefixes = (char *)malloc(number_of_characters);
-
     memset(pieces, '.', number_of_characters);
+
     pieces[WHITE_KING]   = 'K'; pieces[BLACK_KING]   = 'k';
     pieces[WHITE_QUEEN]  = 'Q'; pieces[BLACK_QUEEN]  = 'q';
     pieces[WHITE_ROOK]   = 'R'; pieces[BLACK_ROOK]   = 'r';
@@ -227,6 +230,7 @@ void load_LUTs(void)
     pieces[WHITE_PAWN]   = 'P'; pieces[BLACK_PAWN]   = 'p';
 
     memcpy(algebraic_prefixes, pieces, number_of_characters);
+
     algebraic_prefixes[WHITE_PAWN]
   = algebraic_prefixes[BLACK_PAWN]
   = ' '; /* Pawns are not legally pieces, so they have no algebraic letter. */
