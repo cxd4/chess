@@ -21,7 +21,7 @@ int main(int argc, char* argv[])
             "8/"\
             "8/"\
             "8/"\
-            "PPPPPPPP/"
+            "PPPPPPPP/"\
             "RNBQKBNR "
 
             "w KQkq - 0 1"
@@ -41,12 +41,18 @@ int main(int argc, char* argv[])
         fclose(stream);
 
     legal_moves = enum_moves(&move_list);
-    printf("Total of %i legal moves.\n", legal_moves);
-    show_moves(move_list, legal_moves);
+    if (legal_moves > 0) {
+        printf("Total of %i legal moves.\n", legal_moves);
+        show_moves(move_list, legal_moves);
 
-    if (in_check(WHITE))
-        puts("White is in check.");
-    if (in_check(BLACK))
-        puts("Black is in check.");
+     /* to do:  Add player response/move execution loop to play game here? */
+    } else {
+        printf(
+            "%smate.  That's the end!\n",
+            in_check(game_state.player_turn) ? "Check" : "Stale"
+        );
+        return 0; /* game play finished successfully */
+    }
+
     return 0;
 }
