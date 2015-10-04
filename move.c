@@ -210,7 +210,7 @@ int is_legal_move(int x1, int y1, int x2, int y2)
         if (distance == sqrt(2)) /* pawn captures */
             if (y2 == y1 + 1)
                 if (board[y2][x2] != BLANK_SQUARE
-                 || game_state.en_passant_file == x2 && y2 == BOARD_SIZE - 3)
+                 || (game_state.en_passant_file == x2 && y2 == BOARD_SIZE - 3))
                     break;
         return 0;
     case BLACK_PAWN:
@@ -224,7 +224,7 @@ int is_legal_move(int x1, int y1, int x2, int y2)
         if (distance == sqrt(2)) /* pawn captures */
             if (y2 == y1 - 1)
                 if (board[y2][x2] != BLANK_SQUARE
-                 || game_state.en_passant_file == x2 && y2 == -1 + 3)
+                 || (game_state.en_passant_file == x2 && y2 == -1 + 3))
                     break;
         return 0;
     }
