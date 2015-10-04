@@ -22,7 +22,6 @@ int enum_moves(move_storage ** list_address)
     if (list == NULL)
         list = (move_storage *)malloc(0);
 
-    *(list_address) = list;
     legal_moves = 0;
     for (y1 = 0; y1 < BOARD_SIZE; y1++)
         for (x1 = 0; x1 < BOARD_SIZE; x1++)
@@ -34,15 +33,15 @@ int enum_moves(move_storage ** list_address)
                             ++legal_moves * sizeof(move_storage)
                         );
                         assert(new_address != NULL);
+                        list = new_address;
+
                         list[legal_moves - 1].origin.file = x1;
                         list[legal_moves - 1].origin.rank = y1;
                         list[legal_moves - 1].target.file = x2;
                         list[legal_moves - 1].target.rank = y2;
                     }
-                ;
-            ;
-        ;
-    ;
+
+    *(list_address) = list;
     return (legal_moves);
 }
 
