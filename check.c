@@ -20,7 +20,7 @@ int in_check(int player)
         key = BLACK_KING;
         break;
     default:
-        return -1;
+        assert(player == WHITE_KING);
     }
 
     rank = file = -1;
