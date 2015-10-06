@@ -59,15 +59,19 @@ int show_moves(move_storage * list, int limit)
         const int y1 = list[i].origin.rank;
         const int x2 = list[i].target.file;
         const int y2 = list[i].target.rank;
+        const int moves_per_line = 5; /* assumes 80-char-wide TUI */
 
+        if (i % moves_per_line == 0 && i != 0)
+            putchar('\n');
         printf(
-            "    % 3i.  %c%c%d:%c%d\n",
+            "    % 3i.  %c%c%d:%c%d",
             i + 1,
             algebraic_prefixes[board[y1][x1]],
             files[x1], y1 + 1,
             files[x2], y2 + 1
         );
     }
+    putchar('\n');
     assert(i >= 0);
     return (i);
 }
