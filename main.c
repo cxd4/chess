@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <time.h>
 
+#include <assert.h>
 #include "forsyth.h"
 
 #include "move.h"
@@ -73,10 +74,14 @@ int main(int argc, char* argv[])
         show_moves(move_list, legal_moves);
 
         do {
+            char * space;
+
             fputs("Your move:  ", stdout);
-            fgets(&human_response[0], KEY_READ_BUFFER_SIZE, stdin);
+            do {
+                space = fgets(&human_response[0], KEY_READ_BUFFER_SIZE, stdin);
+            } while (space != &human_response[0]);
             move_number = strtoul(&human_response[0], NULL, 0);
-        } while (move_number != 0);
+        } while (move_number == 0);
         --move_number; /* Convert one-based to zero-based index. */
         execute_legal_move_by_ID(move_list, move_number);
 
