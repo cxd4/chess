@@ -268,6 +268,14 @@ void execute_legal_move_by_ID(move_storage * list, size_t index)
 
 void execute_move(int x1, int y1, int x2, int y2)
 {
+    printf(
+        "Moved:  %c%c%d%c%c%d\n",
+        toupper(algebraic_prefixes[board[y1][x1]]),
+        files[x1], y1 + 1,
+        (board[y2][x2] != BLANK_SQUARE) ? 'x' : '-',
+        files[x2], y2 + 1
+    );
+
     board[y2][x2] = board[y1][x1];
     board[y1][x1] = BLANK_SQUARE;
     ++(game_state.player_turn);
