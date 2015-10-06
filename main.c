@@ -74,7 +74,7 @@ int main(int argc, char* argv[])
 
         do {
             fputs("Your move:  ", stdout);
-            fgets(&human_response[0], KEY_READ_BUFFER_SIZE, stdin)
+            fgets(&human_response[0], KEY_READ_BUFFER_SIZE, stdin);
             move_number = strtoul(&human_response[0], NULL, 0);
         } while (move_number != 0);
         --move_number; /* Convert one-based to zero-based index. */
