@@ -137,15 +137,15 @@ int is_legal_move(int x1, int y1, int x2, int y2)
 
     case WHITE_QUEEN:
     case BLACK_QUEEN:
-        if (slope != +1 && slope != -1 /* bishops */
-         && slope !=  0 /* rooks, horizontal */
-         && slope != +infinity && slope != -infinity)
-            return 0;
+        if (slope == -1 || slope == +1)
+            goto bishop_testing;
+        if (slope != -infinity && slope != +infinity && slope != 0)
+            return 0; /* not a legal rook move */
      /* Fall through. */
 
     case WHITE_ROOK:
     case BLACK_ROOK:
-        if (y2 == y1)
+        if (y2 == y1) {
             if (x2 < x1) /* destination to the left of the rook */
                 for (xt = x1 - 1; xt > x2; xt--) {
                     if (board[y2][xt] == BLANK_SQUARE)
@@ -158,7 +158,8 @@ int is_legal_move(int x1, int y1, int x2, int y2)
                         continue;
                     return 0;
                 }
-        else if (x2 == x1)
+            break;
+        } else if (x2 == x1) {
             if (y2 < y1) /* destination downwards from the rook */
                 for (yt = y1 - 1; yt > y2; yt--) {
                     if (board[yt][x2] == BLANK_SQUARE)
@@ -171,15 +172,13 @@ int is_legal_move(int x1, int y1, int x2, int y2)
                         continue;
                     return 0;
                 }
-        else
-            if (slope != +1. && slope != -1.)
-                return 0;
-
-        if (slope == -infinity || slope == 0 || slope == +infinity)
-            break; /* Do not fall through to complete Queen tests. */
+            break;
+        } else
+            return 0;
 
     case WHITE_BISHOP:
     case BLACK_BISHOP:
+    bishop_testing:
         if (slope != +1 && slope != -1)
             return 0;
         if (y2 > y1 && x2 > x1) /* quadrant I, range check to upper-right */
