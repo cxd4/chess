@@ -290,6 +290,8 @@ void execute_move(int x1, int y1, int x2, int y2)
             board[y2 - 1][x2] = BLANK_SQUARE; /* White captures "en passant". */
         if (y2 == -1 + 3 && board[y2][x2] == BLACK_PAWN)
             board[y2 + 1][x2] = BLANK_SQUARE; /* Black captures "en passant". */
+    } else {
+        game_state.en_passant_file = -1;
     }
 
  /* castling... erm, think I have not added this to moves enumeration yet */
