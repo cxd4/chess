@@ -3,6 +3,7 @@
 #include <assert.h>
 #include <malloc.h>
 #include <stdlib.h>
+#include <ctype.h>
 
 #include "move.h"
 #include "check.h"
@@ -66,7 +67,7 @@ int show_moves(move_storage * list, int limit)
         printf(
             "    % 3i.  %c%c%d:%c%d",
             i + 1,
-            algebraic_prefixes[board[y1][x1]],
+            toupper(algebraic_prefixes[board[y1][x1]]),
             files[x1], y1 + 1,
             files[x2], y2 + 1
         );
