@@ -41,6 +41,8 @@ int enum_moves(move_storage ** list_address)
                         list[legal_moves - 1].target.rank = y2;
                     }
 
+    assert(list != NULL);
+    assert(legal_moves >= 0);
     *(list_address) = list;
     return (legal_moves);
 }
@@ -66,6 +68,7 @@ int show_moves(move_storage * list, int limit)
             files[x2], y2 + 1
         );
     }
+    assert(i >= 0);
     return (i);
 }
 
@@ -246,4 +249,75 @@ int is_legal_move(int x1, int y1, int x2, int y2)
         return 0;
 
     return 1;
+}
+
+void execute_legal_move_by_ID(move_storage * list, size_t index)
+{
+    assert(list != NULL);
+    execute_move(
+        list[index].origin.file, list[index].origin.rank,
+        list[index].target.file, list[index].target.rank
+    );
+    return;
+}
+
+void execute_move(int x1, int y1, int x2, int y2)
+{
+    board[y2][x2] = board[y1][x1];
+    board[y1][x1] = BLANK_SQUARE;
+    ++(game_state.player_turn);
+    game_state.player_turn %= NUMBER_OF_PLAYERS;
+ /* Done?  I wish.... */
+
+ /* pawn promotion (to do:  implement under-promotion?) */
+    if (board[y2][x2] == WHITE_PAWN && y2 == BOARD_SIZE - 1)
+        board[y2][x2] = WHITE_QUEEN;
+    if (board[y2][x2] == BLACK_PAWN && y2 == 0)
+        board[y2][x2] = BLACK_QUEEN;
+
+ /* en passant ... more stupid pawn rules */
+    if (x2 == x1 && (y2 == y1 + 2 || y2 == y1 - 2)) {
+        if ((board[y2][x2] == WHITE_PAWN && y1 == 0 + 1)
+         || (board[y2][x2] == BLACK_PAWN && y1 == BOARD_SIZE - 1))
+            game_state.en_passant_file = x2;
+    } else if (game_state.en_passant_file == x2) {
+        if (y2 == BOARD_SIZE - 3 && board[y2][x2] == WHITE_PAWN)
+            board[y2 - 1][x2] = BLANK_SQUARE; /* White captures "en passant". */
+        if (y2 == -1 + 3 && board[y2][x2] == BLACK_PAWN)
+            board[y2 + 1][x2] = BLANK_SQUARE; /* Black captures "en passant". */
+    }
+
+ /* castling... erm, think I have not added this to moves enumeration yet */
+    if (x1 != e || y2 != y1)
+        return; /* Castling means the King moves from file e along back rank. */
+    if (board[y2][x2] == WHITE_KING && y1 == 0) {
+        if (x2 == x1 + 2 && game_state.castling.K) {
+            SQUARE(f1) = SQUARE(h1);
+            SQUARE(h1) = BLANK_SQUARE;
+        }
+        if (x2 == x1 - 2 && game_state.castling.Q) {
+            SQUARE(d1) = SQUARE(a1);
+            SQUARE(a1) = BLANK_SQUARE;
+        }
+    }
+    if (board[y2][x2] == BLACK_KING && y1 == BOARD_SIZE - 1) {
+        if (x2 == x1 + 2 && game_state.castling.k) {
+            SQUARE(f8) = SQUARE(h8);
+            SQUARE(h8) = BLANK_SQUARE;
+        }
+        if (x2 == x1 - 2 && game_state.castling.q) {
+            SQUARE(d8) = SQUARE(a8);
+            SQUARE(a8) = BLANK_SQUARE;
+        }
+    }
+    if (SQUARE(e1) != WHITE_KING || SQUARE(h1) != WHITE_ROOK)
+        game_state.castling.K = 0;
+    if (SQUARE(e1) != WHITE_KING || SQUARE(a1) != WHITE_ROOK)
+        game_state.castling.Q = 0;
+    if (SQUARE(e8) != BLACK_KING || SQUARE(h8) != BLACK_ROOK)
+        game_state.castling.k = 0;
+    if (SQUARE(e8) != BLACK_KING || SQUARE(a8) != BLACK_ROOK)
+        game_state.castling.q = 0;
+
+    return;
 }
