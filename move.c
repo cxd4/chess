@@ -133,6 +133,38 @@ int is_legal_move(int x1, int y1, int x2, int y2)
             break;
         if (distance == sqrt(2)) /* diagonally by one */
             break;
+        if (distance == 2 && y2 == y1 && x1 == e) { /* castling from rank e */
+            if (in_check(game_state.player_turn))
+                return 0; /* Castling out of check is illegal. */
+
+            if (board[y1][x1] == WHITE_KING && y1 == 0) {
+                if (game_state.castling.K && x2 == g) {
+                    if (test_King(f, 0) | test_Queen(f, 0) | test_knight(f, 0))
+                        return 0; /* Castling "through" check is illegal. */
+                    if (SQUARE(f1) == BLANK_SQUARE)
+                        break;
+                }
+                if (game_state.castling.Q && x2 == c) {
+                    if (test_King(d, 0) | test_Queen(d, 0) | test_knight(d, 0))
+                        return 0;
+                    if (SQUARE(d1) == BLANK_SQUARE && SQUARE(b1) == BLANK_SQUARE)
+                        break;
+                }
+            } else if (board[y1][x1] == BLACK_KING && y1 == BOARD_SIZE - 1) {
+                if (game_state.castling.k && x2 == g) {
+                    if (test_King(f, 7) | test_Queen(f, 7) | test_knight(f, 7))
+                        return 0; /* Castling "through" check is illegal. */
+                    if (SQUARE(f8) == BLANK_SQUARE)
+                        break;
+                }
+                if (game_state.castling.q && x2 == c) {
+                    if (test_King(d, 7) | test_Queen(d, 7) | test_knight(d, 7))
+                        return 0;
+                    if (SQUARE(d8) == BLANK_SQUARE && SQUARE(b8) == BLANK_SQUARE)
+                        break;
+                }
+            }
+        }
         return 0;
 
     case WHITE_QUEEN:
