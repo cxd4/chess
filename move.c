@@ -60,7 +60,7 @@ int show_moves(move_storage * list, int limit)
         const int y1 = list[i].origin.rank;
         const int x2 = list[i].target.file;
         const int y2 = list[i].target.rank;
-        const int moves_per_line = 5; /* assumes 80-char-wide TUI */
+        const int moves_per_line = 4; /* assumes 64-char-wide TUI */
 
         if (i % moves_per_line == 0 && i != 0)
             putchar('\n');
