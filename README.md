@@ -1,4 +1,4 @@
-Currently a dummy chess engine template that implements all move tests enough to play a full, random game of chess (either player vs. Black, White vs. player, or player vs. player).
+Currently a dummy chess engine template that implements all move tests enough to play a full, random game (either human vs. human, White vs. human or human vs. Black).
 
 As such, it does not yet:
 * Analyze the board recursively for in-depth strategy (requires node storage/allocation?).
