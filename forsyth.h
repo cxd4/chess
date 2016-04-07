@@ -11,7 +11,7 @@
 extern char * pieces;
 extern char * algebraic_prefixes;
 
-extern int load_FEN(char * FEN);
+extern int load_FEN(const char * FEN);
 extern void load_Forsyth(FILE * stream);
 extern void load_LUTs(void);
 

@@ -41,7 +41,7 @@ void load_Forsyth(FILE * stream)
  * be redone to something more flexible and readable.
  */
 
-int load_FEN(char * FEN)
+int load_FEN(const char * FEN)
 {
     register int i;
     register int file, rank;
