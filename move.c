@@ -34,7 +34,7 @@ int enum_moves(move_storage ** list_address)
                             ++legal_moves * sizeof(move_storage)
                         );
                         assert(new_address != NULL);
-                        list = new_address;
+                        list = (move_storage *)new_address;
 
                         list[legal_moves - 1].origin.file = x1;
                         list[legal_moves - 1].origin.rank = y1;
