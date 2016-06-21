@@ -1,0 +1,5 @@
+# compiled output (from master branch with the C code)
+obj/
+
+# executable name (from master branch with the C code)
+chess
