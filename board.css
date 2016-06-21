@@ -8,6 +8,10 @@ div, span, table {
     border-collapse :  collapse;
 }
 
+td.n {
+    width           :  40px;
+    text-align      :  center;
+}
 .w { /* light squares (symbolically white) */
     background-color:  #C0C0C0;
     display         :  inline-block;
