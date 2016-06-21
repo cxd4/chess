@@ -41,45 +41,50 @@ function write_square(name, ID) {
     return;
 }
 
-function JS_main(ML_interface) {
+function write_position(Forsyth) {
     "use strict";
-    var file;
-    var rank;
+    var i;
+    var j;
+    var character;
+    var code_point;
 
-    doc = ML_interface;
-    rank = 3 - 1;
-    while (rank < BOARD_HEIGHT - 2) {
-        file = 0;
-        while (file < BOARD_WIDTH) {
-            write_square(square(file, rank), blank);
+    var file = 0;
+    var rank = BOARD_WIDTH - 1;
+
+    i = 0;
+    while (i < Forsyth.length) {
+        character = Forsyth.charAt(i);
+        code_point = character.charCodeAt(0);
+        j = 0;
+
+        if (code_point >= 0x31 && code_point <= 0x38) {
+            while (j < code_point - 0x30) {
+                write_square(square(file + j, rank), blank);
+                j += 1;
+            }
+            file += j;
+        } else if (character === "/") {
+            rank -= 1;
+            file = 0;
+        } else {
+            while (j < blank) {
+                if (figures[j] === character) {
+                    write_square(square(file, rank), j);
+                    break;
+                }
+                j += 1;
+            }
             file += 1;
         }
-        rank += 1;
+        i += 1;
     }
+}
 
-    file = 0;
-    while (file < BOARD_WIDTH) {
-        write_square(square(file, 0 + 2 - 1), white_pawn);
-        write_square(square(file, BOARD_HEIGHT - 2), black_pawn);
-        file += 1;
-    }
+function JS_main(ML_interface) {
+    "use strict";
+    var Forsyth = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR";
 
-    write_square("a1", white_rook);
-    write_square("b1", white_knight);
-    write_square("c1", white_bishop);
-    write_square("d1", white_queen);
-    write_square("e1", white_king);
-    write_square("f1", white_bishop);
-    write_square("g1", white_knight);
-    write_square("h1", white_rook);
-
-    write_square("a8", black_rook);
-    write_square("b8", black_knight);
-    write_square("c8", black_bishop);
-    write_square("d8", black_queen);
-    write_square("e8", black_king);
-    write_square("f8", black_bishop);
-    write_square("g8", black_knight);
-    write_square("h8", black_rook);
+    doc = ML_interface;
+    write_position(Forsyth);
     return;
 }
