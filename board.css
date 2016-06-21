@@ -3,8 +3,9 @@ body {
     color           :  #FFFFFF;
     font-family     :  Courier New, Courier, monospace;
 }
-div, span {
+div, span, table {
     line-height     :  0%;
+    border-collapse :  collapse;
 }
 
 .w { /* light squares (symbolically white) */
@@ -16,9 +17,9 @@ div, span {
     display         :  inline-block;
 }
 
-img {
-    -webkit-user-select:  none;
-    -khtml-user-select :  none;
+img, table, tr, td { /* Disable highlight selection in most browsers. */
     -moz-user-select   :  none;
+    -khtml-user-select :  none;
+    -webkit-user-select:  none;
     -ms-user-select    :  none;
 }
