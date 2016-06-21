@@ -1,0 +1,19 @@
+body {
+    background-color:  #000000;
+    color           :  #FFFFFF;
+    font-family     :  Courier New, Courier, monospace;
+}
+
+table, td, th {
+    border          :  none;
+    background-color:  #FF0000;
+}
+
+img { border: 0; }
+
+td.w { /* light squares (symbolically white) */
+    background-color:  #C0C0C0;
+}
+td.b { /* dark squares (symbolically black) */
+    background-color:  #808080;
+}
