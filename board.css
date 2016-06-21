@@ -3,12 +3,15 @@ body {
     color           :  #FFFFFF;
     font-family     :  Courier New, Courier, monospace;
 }
+div, span {
+    line-height     :  0%;
+}
 
-span.w { /* light squares (symbolically white) */
+.w { /* light squares (symbolically white) */
     background-color:  #C0C0C0;
     display         :  inline-block;
 }
-span.b { /* dark squares (symbolically black) */
+.b { /* dark squares (symbolically black) */
     background-color:  #808080;
     display         :  inline-block;
 }
