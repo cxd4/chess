@@ -41,7 +41,7 @@ function write_square(name, ID) {
     "use strict";
     var file_path;
 
-    file_path = "\"images/" + ID + ".gif\"";
+    file_path = "\"engine/images/" + ID + ".gif\"";
     doc.getElementById(name).innerHTML =
             "<img src=" + file_path + "alt=\"" + figures[ID] + "\">";
     return;
