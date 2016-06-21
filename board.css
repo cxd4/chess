@@ -17,7 +17,7 @@ div, span, table {
     display         :  inline-block;
 }
 
-img, table, tr, td { /* Disable highlight selection in most browsers. */
+table, tr, td { /* Disable highlight selection in most browsers. */
     -moz-user-select   :  none;
     -khtml-user-select :  none;
     -webkit-user-select:  none;
