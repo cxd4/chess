@@ -15,3 +15,10 @@ div, span {
     background-color:  #808080;
     display         :  inline-block;
 }
+
+img {
+    -webkit-user-select:  none;
+    -khtml-user-select :  none;
+    -moz-user-select   :  none;
+    -ms-user-select    :  none;
+}
