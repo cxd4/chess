@@ -4,16 +4,11 @@ body {
     font-family     :  Courier New, Courier, monospace;
 }
 
-table, td, th {
-    border          :  none;
-    background-color:  #FF0000;
-}
-
-img { border: 0; }
-
-td.w { /* light squares (symbolically white) */
+span.w { /* light squares (symbolically white) */
     background-color:  #C0C0C0;
+    display         :  inline-block;
 }
-td.b { /* dark squares (symbolically black) */
+span.b { /* dark squares (symbolically black) */
     background-color:  #808080;
+    display         :  inline-block;
 }
