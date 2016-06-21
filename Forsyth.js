@@ -82,9 +82,18 @@ function write_position(Forsyth) {
 
 function JS_main(ML_interface) {
     "use strict";
+    var f;
+    var limit;
+    var needle = "f=";
     var Forsyth = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR";
 
     doc = ML_interface;
+    f = doc.location.href.search(needle);
+    if (f >= 0) {
+        f += needle.length;
+        limit = doc.location.href.length; /* To do:  Adjust if '&' occurs. */
+        Forsyth = doc.location.href.substring(f, limit);
+    }
     write_position(Forsyth);
     return;
 }
