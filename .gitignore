@@ -1,0 +1,5 @@
+# compiled output
+obj/
+
+# executable name
+chess
