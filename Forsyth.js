@@ -26,6 +26,12 @@ function square(file, rank) {
     "use strict";
     var name = [97, 49]; /* ['a', '1'] (Except JavaScript sucks.) */
 
+    if (file > BOARD_WIDTH - 1) {
+        file = BOARD_WIDTH - 1;
+    }
+    if (rank > BOARD_HEIGHT - 1) {
+        rank = BOARD_HEIGHT - 1;
+    }
     name[0] += file;
     name[1] += rank;
     return String.fromCharCode(name[0], name[1]);
