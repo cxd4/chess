@@ -1,0 +1,7 @@
+Back in 2012, some friends wanted a way to play online chess that didn't require playing on a foreign server.  We also needed a way to quickly set up the board and link to the result as an image without having to create our own images manually.
+
+At the time, a site called [ChessUp](http://web.archive.org/web/20121027074447/http://chessup.net/) actually did a very good job at servicing both of these features, although the site seems to have become suspended and was probably overtaxed by the great bandwidth in PHP requests to convert URLs to PNGs.
+
+With no known replacement for ChessUp, I have created [a JavaScript-based solution](http://cxd4.github.io/chess/?f=rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR).  Like ChessUp, it accepts a custom chess position in the form of a Forsyth string, conveniently supplied within the URL itself.  Unlike ChessUp, however, it uses no real bandwidth to service the image, as it is drawn purely from client-side scripting and does not compute the image externally from a server.  This does prevent us from being able to hot-link directly to the position as an inline image in forum posts, but it also eliminates the bandwidth problem and can forever tolerate links to the program under the service of GitHub Pages.
+
+The master branch of this repository contains a chess engine computer, written in C.  This functionality has not been ported to JavaScript, but the website does host a Java port of an existing chess program that is flexibly scriptable with JavaScript.
