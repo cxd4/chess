@@ -106,6 +106,10 @@ function JS_main(ML_interface) {
 
 var jc;
 
+/* page DOM timer hack to work around synchronous applet loads */
+var schedule;
+var centiseconds = 0;
+
 function jchess_new_move(move_string) {
     "use strict";
  /* alert(move + ":  " + move_string + "\n" + jc.GetMessageLineText(2)); */
@@ -129,18 +133,28 @@ function jchess_new_game() {
 
 function JVM_main(ML_interface, applet) {
     "use strict";
-    var f;
-    var limit;
+    var life_type;
+    var limit = ML_interface.location.href.length;
+    var f = ML_interface.location.href.search("f=");
 
     doc = ML_interface;
     jc = applet;
-    f = doc.location.href.search("f=");
     if (f >= 0) {
-        limit = doc.location.href.length;
-        jc.NewGame();
-        jc.SetPosition(
-            doc.location.href.substring(f + 2, limit) + " w - - 0 1"
-        );
+        f = doc.location.href.substring(f + 2, limit) + " w - - 0 1";
+        do {
+            try {
+                applet.SetPosition(f);
+                life_type = -63;
+            } catch (error) {
+                life_type = +63;
+            }
+        } while (false);
+        if (life_type !== +63 || centiseconds >= 100 * 10) {
+            clearInterval(schedule);
+            schedule = -1;
+        } else {
+            centiseconds += 1;
+        }
     }
     return;
 }

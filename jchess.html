@@ -7,7 +7,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 </head>
 
-<body onload="JVM_main(document, jchess)">
+<body>
 <div>
 <applet code="jchess.class" height="400" name="jchess" width="400" VIEWASTEXT MAYSCRIPT>
 	<param name="MAYSCRIPT" value="true">
@@ -32,6 +32,15 @@
 	<param name="OnNewGame" value="jchess_new_game">
 </applet>
 </div>
+<script type="text/javascript">
+function timer_hack() {
+    "use strict";
+
+    JVM_main(document, jchess);
+    return;
+}
+schedule = window.setInterval(timer_hack, 10);
+</script>
 
 <hr>
 <p><a href="http://validator.w3.org/check?uri=referer">
