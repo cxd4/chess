@@ -104,17 +104,42 @@ function JS_main(ML_interface) {
     return;
 }
 
+var jc;
+
+function jchess_new_move(move_string) {
+    "use strict";
+ /* alert(move + ":  " + move_string + "\n" + jc.GetMessageLineText(2)); */
+    return (move_string);
+}
+function jchess_new_game() {
+    "use strict";
+
+    jc.SetLevel(1, 60000, 8);
+    jc.SetPosition("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
+    jc.FlipBoard(false);
+    jc.StartCompute();
+
+    if (jc.IsBrainBusy() === false) {
+        jc.DoMove(1, 34); /* 1.  Nb1-c3 */
+    } else {
+        jc.MoveNow();
+    }
+    return;
+}
+
 function JVM_main(ML_interface, applet) {
     "use strict";
     var f;
     var limit;
 
-    f = document.location.href.search("f=");
+    doc = ML_interface;
+    jc = applet;
+    f = doc.location.href.search("f=");
     if (f >= 0) {
-        limit = document.location.href.length;
-        applet.NewGame();
-        applet.SetPosition(
-            document.location.href.substring(f + 2, limit) + " w - - 0 1"
+        limit = doc.location.href.length;
+        jc.NewGame();
+        jc.SetPosition(
+            doc.location.href.substring(f + 2, limit) + " w - - 0 1"
         );
     }
     return;
