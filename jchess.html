@@ -1,13 +1,15 @@
 <!DOCTYPE html>
 <html>
 <head>
-<link rel="stylesheet" href="board.css" type="text/css">
 <title>Little ChessPartner 1.12</title>
+<link rel="stylesheet" href="board.css" type="text/css">
+<script src="Forsyth.js" type="text/javascript"></script>
 </head>
 
-<body>
+<body onload="JVM_main(document, jchess)">
 <div>
-<applet code="jchess.class" height="400" name="jchess" width="400" VIEWASTEXT>
+<applet code="jchess.class" height="400" name="jchess" width="400" VIEWASTEXT MAYSCRIPT>
+	<param name="MAYSCRIPT" value="true">
 	<param name="code" value="jchess.class">
         <param name="codebase" value="http://cxd4.github.io/chess/engine/">
 	<param name="fen" value="rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1">
@@ -30,7 +32,7 @@
 
 <hr>
 <p><a href="http://validator.w3.org/check?uri=referer">
-<img alt="Valid HTML 4.01 Strict" SRC="http://www.w3.org/Icons/valid-html401">
+<img alt="Valid HTML 4.01 Strict" src="http://www.w3.org/Icons/valid-html401">
 </a></p>
 
 </body>

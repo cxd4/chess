@@ -103,3 +103,19 @@ function JS_main(ML_interface) {
     write_position(Forsyth);
     return;
 }
+
+function JVM_main(ML_interface, applet) {
+    "use strict";
+    var f;
+    var limit;
+
+    f = document.location.href.search("f=");
+    if (f >= 0) {
+        limit = document.location.href.length;
+        applet.NewGame();
+        applet.SetPosition(
+            document.location.href.substring(f + 2, limit) + " w - - 0 1"
+        );
+    }
+    return;
+}
