@@ -1,0 +1,96 @@
+LOKASOFT FREEWARE END USER LICENSE AGREEMENT
+
+Software License agreement for Little ChessPartner (TM)
+
+
+YOU SHOULD CAREFULLY READ THE FOLLOWING TERMS AND CONDITIONS 
+BEFORE USING THE SOFTWARE WHICH CAN BE DOWNLOADED FROM THE 
+LOKASOFT WEBSITE, ALONG WITH ANY ACCOMPANYING DOCUMENTATION (THE 
+SOFTWARE AND ITS DOCUMENTATION WILL BE REFERRED TO HEREIN AS 
+THE "SOFTWARE").
+
+YOUR USE OF THE SOFTWARE MEANS THAT YOU ACCEPT THESE TERMS AND 
+CONDITIONS. IF YOU DO NOT AGREE WITH THESE TERMS AND 
+CONDITIONS, THEN LOKASOFT IS UNWILLING TO LICENSE THE SOFTWARE 
+TO YOU, AND YOU SHOULD NOT USE THE SOFTWARE.  BY INSTALLING, 
+DOWNLOADING, COPYING, OR OTHERWISE USING THE SOFTWARE, YOU 
+ACKNOWLEDGE THAT YOU HAVE READ THESE TERMS AND CONDITIONS, 
+UNDERSTAND THEM, AND AGREE TO BE BOUND BY THEM.  IF YOU DO NOT 
+AGREE TO THESE TERMS AND CONDITIONS, YOU ARE NOT AUTHORIZED AND 
+MAY NOT USE THE SOFTWARE.
+
+
+1.  LICENSE GRANT.  Subject to the terms and conditions of this Agreement,
+Lokasoft hereby grants to you a non-exclusive, non-transferable right to
+use, copy and distribute solely for Non-Commercial Purposes (as defined
+below) the Software and the accompanying documentation (the "Documentation").    
+a. For purposes of the foregoing, "non-commercial purposes" means
+non-commercial, non-governmental use, including, without limitation, 
+home use, use on a personal website, student or academic use, or use by
+non-profit human rights organizations.  The Software is "in use" when it
+is loaded into the temporary memory (i.e., RAM) or installed into the 
+permanent memory (e.g., hard disk, CD ROM, or other storage device) of
+a computer for the purpose of being accessible in client-mode by an end user.  
+b. You may make exact, unmodified copies of the Software and distribute
+such copies solely (i) by electronic means; (ii) for Non-Commercial
+Purposes; and (iii) with all proprietary notices (including without
+limitation all copyright notices and this End User License Agreement)
+intact and unmodified or obscured.  
+
+2.  RESTRICTIONS.  You may not rent, lease, loan or resell the 
+Software. You may not transfer any of the rights granted to you
+under this Agreement.  You may not reverse engineer, decompile, or
+disassemble the Software, except to the extent the foregoing restriction
+is expressly prohibited by applicable law.  You may not modify, or
+create derivative works based upon, the Software in whole or in part.
+You may not copy the Software or Documentation except as expressly permitted
+in Section 1 above.  You may not remove any proprietary notices or labels
+on the Software.  All rights not expressly set forth hereunder are reserved
+by Lokasoft.
+
+3.  TERMINATION OF THIS LICENSE.  Lokasoft may terminate 
+this license at any time if you are in breach of any of these 
+terms and conditions of use.  Upon such termination you must 
+and agree to immediately destroy all copies of the SOFTWARE.
+
+4.  UPDATES.  Lokasoft does not offer technical support for the
+Software, however, Lokasoft welcomes your feedback.
+For further information, please refer to http://www.lokasoft.nl.
+
+5.  OWNERSHIP RIGHTS.  The Software is protected by United States copyright
+laws and international treaty provisions. Lokasoft own and retain all rights,
+title and interest in and to the Software, including all copyrights, patents,
+trade secret rights, trademarks and other intellectual property rights therein.
+Your possession, installation, or use of the Software does not transfer to
+you any title to the intellectual property in the Software, and you will not
+acquire any rights to the Software except as expressly set forth in this
+Agreement.  All copies of the Software and Documentation made hereunder must
+contain the same proprietary notices that appear on and in the Software and
+Documentation.
+
+6.  DISCLAIMER.  THE SOFTWARE IS PROVIDED "AS-IS."  LOKASOFT 
+MAKES NO REPRESENTATIONS OR WARRANTIES OF ANY KIND, EXPRESS
+OR IMPLIED, AS TO THE SOFTWARE OR ITS OPERATION.  TO THE FULL
+EXTENT PERMISSIBLE BY APPLICABLE  LAW, LOKASOFT DISCLAIMS ALL
+WARRANTIES, EXPRESS OR IMPLIED, INCLUDING, BUT NOT LIMITED TO,
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A
+PARTICULAR PURPOSE, AND ANY WARRANTIES OF NON-INFRINGEMENT.
+SOME JURISDICTIONS DO NOT ALLOW OR OTHERWISE GOVERN THE SCOPE
+OF EXCLUSIONS OF IMPLIED WARRANTIES, SO THE ABOVE EXCLUSIONS
+MAY NOT APPLY IN FULL.
+
+7.  LIMITATION ON DAMAGES.  IN NO EVENT SHALL LOKASOFT BE 
+LIABLE TO ANY PARTY FOR DIRECT, INDIRECT, SPECIAL OR OTHER 
+CONSEQUENTIAL OR INCIDENTAL DAMAGES ARISING DIRECTLY OR 
+INDIRECTLY FROM THE USE OF THE SOFTWARE, INCLUDING BUT NOT 
+LIMITED TO ANY LOST PROFITS, BUSINESS INTERRUPTION, LOSS OF 
+PROGRAMS OR OTHER DATA ON YOUR INFORMATION HANDLING SYSTEM OR 
+OTHERWISE, EVEN IF LOKASOFT HAS BEEN EXPRESSLY ADVISED OF 
+THE POSSIBILITY OF SUCH DAMAGES.
+
+8.  MISCELLANEOUS. This License agreement is governed by
+the laws of the Netherlands.
+
+Copyright (C) 1992-2000 Lokasoft
+All Rights Reserved
+
