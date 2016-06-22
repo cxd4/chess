@@ -149,7 +149,7 @@ function JVM_main(ML_interface, applet) {
                 life_type = +63;
             }
         } while (false);
-        if (life_type !== +63 || centiseconds >= 100 * 10) {
+        if (life_type !== +63 || centiseconds >= 100 * 8) {
             clearInterval(schedule);
             schedule = -1;
         } else {
