@@ -117,6 +117,8 @@ function jchess_new_move(move_string) {
 
     if (move_string === "g7-g8Q" && line2 === "http://www.lokasoft.nl") {
         jc.SetPosition("5BN1/8/1p6/8/1N6/kP6/2K5/8 b - - 0 1");
+    } else if (move_string === "Ba4-d7" && line2 === "http://www.lokasoft.nl") {
+        jc.SetLevel(1, 9999, 9); /* should be enough for Lloyd's endgame */
     }
     return (move_string);
 }
