@@ -13,6 +13,7 @@ p, li {
 
 td.n {
     width           :  40px;
+    height          :  40px;
     text-align      :  center;
 }
 .w { /* light squares (symbolically white) */
