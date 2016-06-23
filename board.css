@@ -13,14 +13,17 @@ p, li {
 
 td.n {
     width           :  40px;
-    height          :  40px;
     text-align      :  center;
 }
 .w { /* light squares (symbolically white) */
+    width           :  40px;
+    height          :  40px;
     background-color:  #C0C0C0;
     display         :  inline-block;
 }
 .b { /* dark squares (symbolically black) */
+    width           :  40px;
+    height          :  40px;
     background-color:  #808080;
     display         :  inline-block;
 }
