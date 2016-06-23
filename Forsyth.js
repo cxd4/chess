@@ -112,7 +112,12 @@ var centiseconds = 0;
 
 function jchess_new_move(move_string) {
     "use strict";
- /* alert(move + ":  " + move_string + "\n" + jc.GetMessageLineText(2)); */
+    var line1 = jc.GetMessageLineText(1);
+    var line2 = jc.GetMessageLineText(2);
+
+    if (move_string === "g7-g8Q" && line2 === "http://www.lokasoft.nl") {
+        jc.SetPosition("5BN1/8/1p6/8/1N6/kP6/2K5/8 b - - 0 1");
+    }
     return (move_string);
 }
 function jchess_new_game() {
