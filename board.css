@@ -10,9 +10,6 @@ div, span, table {
 p, li {
     white-space     :  pre-wrap;
 }
-a {
-    white-space     :  normal;
-}
 
 td.n {
     width           :  40px;
