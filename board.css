@@ -34,5 +34,5 @@ table, tr, td { /* Disable highlight selection in most browsers. */
     -webkit-user-select:  none;
     -ms-user-select    :  none;
 
-    -white-space       :  nowrap /* for viewing on small mobile phones */
+    white-space       :  nowrap /* for viewing on small mobile phones */
 }
