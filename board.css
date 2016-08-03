@@ -33,8 +33,6 @@ table, tr, td { /* Disable highlight selection in most browsers. */
     -khtml-user-select :  none;
     -webkit-user-select:  none;
     -ms-user-select    :  none;
-}
 
-tr { /* Prevent the chess board from wrapping squares to new lines. */
     -white-space       :  nowrap /* for viewing on small mobile phones */
 }
