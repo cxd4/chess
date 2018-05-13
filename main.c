@@ -29,7 +29,7 @@ int main(int argc, char* argv[])
 
     load_LUTs();
     if (argc < 2)
-        FEN_status = load_FEN(
+        FEN_status = load_FEN((const signed char *)
             "rnbqkbnr/"\
             "pppppppp/"\
             "8/"\
@@ -42,7 +42,7 @@ int main(int argc, char* argv[])
             "w KQkq - 0 1"
         );
     else
-        FEN_status = load_FEN(argv[1]);
+        FEN_status = load_FEN((signed char *)argv[1]);
 
     if (FEN_status != FEN_OK)
     {

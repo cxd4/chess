@@ -41,7 +41,7 @@ void load_Forsyth(FILE * stream)
  * be redone to something more flexible and readable.
  */
 
-int load_FEN(const char * FEN)
+int load_FEN(const signed char * FEN)
 {
     register int i;
     register int file, rank;
@@ -211,14 +211,14 @@ int load_FEN(const char * FEN)
     return FEN_OK;
 }
 
-char * pieces;
+signed char * pieces;
 char * algebraic_prefixes;
 
 void load_LUTs(void)
 {
     const size_t number_of_characters = 128;
 
-    pieces             = (char *)malloc(number_of_characters);
+    pieces             = (signed char *)malloc(number_of_characters);
     algebraic_prefixes = (char *)malloc(number_of_characters);
     memset(pieces, '.', number_of_characters);
 

@@ -8,10 +8,10 @@
 #define MAX_FORSYTH_SIZE    72
 /* "11111111/11111111/11111111/11111111/11111111/11111111/11111111/11111111" */
 
-extern char * pieces;
+extern signed char * pieces;
 extern char * algebraic_prefixes;
 
-extern int load_FEN(const char * FEN);
+extern int load_FEN(const signed char * FEN);
 extern void load_Forsyth(FILE * stream);
 extern void load_LUTs(void);
 
