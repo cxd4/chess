@@ -36,8 +36,19 @@ enum {
 #define SQUARE(name)            \
     board[((name)/BOARD_SIZE) % BOARD_SIZE][(name) % BOARD_SIZE]
 
+#ifdef BITS_PER_COORDINATE
+#error BITS_PER_COORDINATE defined prematurely.
+#endif
+
 typedef struct {
-    int file, rank;
+#if (BOARD_SIZE == 8)
+#define BITS_PER_COORDINATE 3
+#else
+#define BITS_PER_COORDINATE 16
+#endif
+    unsigned file:  BITS_PER_COORDINATE;
+    unsigned rank:  BITS_PER_COORDINATE;
+#undef BITS_PER_COORDINATE
 } coordinates;
 
 #endif
