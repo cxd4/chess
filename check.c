@@ -364,104 +364,93 @@ int test_knight(int file, int rank)
     }
 
 /*
- * 1 o'clock
+ * Default each of the 8 surrounding squares within knight's range
+ * to the knight's original square, just in case of overflow outside
+ * the boundaries of the chessboard.  For each "neighbor" square that
+ * is within legal range and inside the chessboard, adjust accordingly.
  */
-    i = 0;
-    neighbors[i].file = file + 1;
-    neighbors[i].rank = rank + 2;
-    if (neighbors[i].file >= BOARD_SIZE || neighbors[i].rank >= BOARD_SIZE)
-    { /* test nullified:  No piece can capture itself or take its own square. */
+    for (i = 0; i < sizeof(neighbors) / sizeof(coordinates); i++) {
         neighbors[i].file = file;
         neighbors[i].rank = rank;
     }
 
 /*
+ * 1 o'clock
+ */
+    i = 0;
+    if (file + 1 < BOARD_SIZE && rank + 2 < BOARD_SIZE) {
+        neighbors[i].file += 1;
+        neighbors[i].rank += 2;
+    } 
+
+/*
  * 2 o'clock
  */
     ++i;
-    neighbors[i].file = file + 2;
-    neighbors[i].rank = rank + 1;
-    if (neighbors[i].file >= BOARD_SIZE || neighbors[i].rank >= BOARD_SIZE)
-    {
-        neighbors[i].file = file;
-        neighbors[i].rank = rank;
+    if (file + 2 < BOARD_SIZE && rank + 1 < BOARD_SIZE) {
+        neighbors[i].file += 2;
+        neighbors[i].rank += 1;
     }
 
 /*
  * 4 o'clock
  */
     ++i;
-    neighbors[i].file = file + 2;
-    neighbors[i].rank = rank - 1;
-    if (neighbors[i].file >= BOARD_SIZE || neighbors[i].rank < 0)
-    {
-        neighbors[i].file = file;
-        neighbors[i].rank = rank;
+    if (file + 2 < BOARD_SIZE && rank - 1 >= 0) {
+        neighbors[i].file += 2;
+        neighbors[i].rank -= 1;
     }
 
 /*
  * 5 o'clock
  */
     ++i;
-    neighbors[i].file = file + 1;
-    neighbors[i].rank = rank - 2;
-    if (neighbors[i].file >= BOARD_SIZE || neighbors[i].rank < 0)
-    {
-        neighbors[i].file = file;
-        neighbors[i].rank = rank;
+    if (file + 1 < BOARD_SIZE && rank - 2 >= 0) {
+        neighbors[i].file += 1;
+        neighbors[i].rank -= 2;
     }
 
 /*
  * 7 o'clock
  */
     ++i;
-    neighbors[i].file = file - 1;
-    neighbors[i].rank = rank - 2;
-    if (neighbors[i].file < 0 || neighbors[i].rank < 0)
-    {
-        neighbors[i].file = file;
-        neighbors[i].rank = rank;
+    if (file - 1 >= 0 && rank - 2 >= 0) {
+        neighbors[i].file -= 1;
+        neighbors[i].rank -= 2;
     }
 
 /*
  * 8 o'clock
  */
     ++i;
-    neighbors[i].file = file - 2;
-    neighbors[i].rank = rank - 1;
-    if (neighbors[i].file < 0 || neighbors[i].rank < 0)
-    {
-        neighbors[i].file = file;
-        neighbors[i].rank = rank;
+    if (file - 2 >= 0 && rank - 1 >= 0) {
+        neighbors[i].file -= 2;
+        neighbors[i].rank -= 1;
     }
 
 /*
  * 10 o'clock
  */
     ++i;
-    neighbors[i].file = file - 2;
-    neighbors[i].rank = rank + 1;
-    if (neighbors[i].file < 0 || neighbors[i].rank >= BOARD_SIZE)
-    {
-        neighbors[i].file = file;
-        neighbors[i].rank = rank;
+    if (file - 2 >= 0 && rank + 1 < BOARD_SIZE) {
+        neighbors[i].file -= 2;
+        neighbors[i].rank += 1;
     }
 
 /*
  * 11 o'clock
  */
     ++i;
-    neighbors[i].file = file - 1;
-    neighbors[i].rank = rank + 2;
-    if (neighbors[i].file < 0 || neighbors[i].rank >= BOARD_SIZE)
-    {
-        neighbors[i].file = file;
-        neighbors[i].rank = rank;
+    if (file - 1 >= 0 && rank + 2 < BOARD_SIZE) {
+        neighbors[i].file -= 1;
+        neighbors[i].rank += 2;
     }
 
-    for (i = 0; i < 8; i++)
-        if (board[neighbors[i].rank][neighbors[i].file] == enemy_knight)
+    for (i = 0; i < sizeof(neighbors) / sizeof(coordinates); i++) {
+        if (board[neighbors[i].rank][neighbors[i].file] == enemy_knight) {
             return 1;
+        }
+    }
     return 0;
 }
 
